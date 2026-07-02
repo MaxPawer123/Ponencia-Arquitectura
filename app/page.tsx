@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { QRCodeSVG } from 'qrcode.react'
 import { cronogramaEventos, convertirHoraAMinutos } from '@/lib/cronograma'
@@ -12,6 +12,7 @@ interface EventoConEstado extends Evento {
   estado: EstadoEvento
 }
 
+// Mapeo de días de la semana con fechas reales (8-13 de Septiembre 2025)
 const DIAS_SEMANA = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'lunes13'] as const
 const ETIQUETAS_DIAS = {
   lunes: 'Lunes 06',
@@ -22,35 +23,93 @@ const ETIQUETAS_DIAS = {
   lunes13: 'Lunes 13'
 }
 
+// Fechas reales del evento (8-13 de Septiembre 2025)
+const FECHA_EVENTO = {
+  lunes: new Date(2025, 8, 6),      // 6 septiembre
+  martes: new Date(2025, 8, 7),     // 7 septiembre
+  miercoles: new Date(2025, 8, 8),  // 8 septiembre
+  jueves: new Date(2025, 8, 9),     // 9 septiembre
+  viernes: new Date(2025, 8, 10),   // 10 septiembre
+  lunes13: new Date(2025, 8, 13)    // 13 septiembre
+}
+
 export default function Page() {
   const [diaActual, setDiaActual] = useState<typeof DIAS_SEMANA[number]>('lunes')
   const [horaActual, setHoraActual] = useState<number>(0)
   const [eventosConEstado, setEventosConEstado] = useState<EventoConEstado[]>([])
   const [qrAbierto, setQrAbierto] = useState<string | null>(null)
+  const [activePonenciaId, setActivePonenciaId] = useState<string | null>(null)
+  const [mostrarModal, setMostrarModal] = useState(false)
+  const previousActivePonenciaRef = useRef<string | null>(null)
 
-  // Detectar día actual al montar
+  // Detectar día actual y hora al montar
   useEffect(() => {
-    const hoy = new Date().getDay()
+    const hoy = new Date()
+    const diaIso = hoy.getDay()
     // Mapear ISO day (0=domingo, 1=lunes, etc.) a nuestros días
     let diaSeleccionado: typeof DIAS_SEMANA[number] = 'lunes'
-    if (hoy === 1) diaSeleccionado = 'lunes'
-    else if (hoy === 2) diaSeleccionado = 'martes'
-    else if (hoy === 3) diaSeleccionado = 'miercoles'
-    else if (hoy === 4) diaSeleccionado = 'jueves'
-    else if (hoy === 5) diaSeleccionado = 'viernes'
-    // Si es otra hora, por defecto mostrar lunes
+    if (diaIso === 1) diaSeleccionado = 'lunes'
+    else if (diaIso === 2) diaSeleccionado = 'martes'
+    else if (diaIso === 3) diaSeleccionado = 'miercoles'
+    else if (diaIso === 4) diaSeleccionado = 'jueves'
+    else if (diaIso === 5) diaSeleccionado = 'viernes'
+    else if (diaIso === 6) diaSeleccionado = 'lunes13' // Si es sábado, mostrar el lunes 13
 
     setDiaActual(diaSeleccionado)
   }, [])
 
-  // Timer en tiempo real cada 30 segundos
+  // Timer en tiempo real cada 10 segundos
   useEffect(() => {
     const actualizarTiempo = () => {
       const ahora = new Date()
       const minutos = ahora.getHours() * 60 + ahora.getMinutes()
       setHoraActual(minutos)
 
-      // Calcular estado de eventos para el día actual
+      // Validación ESTRICTA: día actual + hora del sistema
+      const diaIso = ahora.getDay()
+      let diaActualValidado: typeof DIAS_SEMANA[number] | null = null
+
+      // Mapear día ISO a nuestros días SOLO si la fecha coincide
+      if (diaIso === 1) diaActualValidado = 'lunes'
+      else if (diaIso === 2) diaActualValidado = 'martes'
+      else if (diaIso === 3) diaActualValidado = 'miercoles'
+      else if (diaIso === 4) diaActualValidado = 'jueves'
+      else if (diaIso === 5) diaActualValidado = 'viernes'
+      else if (diaIso === 6) diaActualValidado = 'lunes13'
+
+      // Buscar evento activo SOLO en el día validado del sistema
+      let eventoActivo: EventoConEstado | null = null
+      
+      if (diaActualValidado) {
+        const eventosDelDia = cronogramaEventos[diaActualValidado] || []
+        for (const evento of eventosDelDia) {
+          const horaInicio = convertirHoraAMinutos(evento.horaInicio)
+          const horaFin = convertirHoraAMinutos(evento.horaFin)
+
+          let estado: EstadoEvento = 'proximo'
+          if (minutos >= horaInicio && minutos < horaFin) {
+            estado = evento.expositores.length === 0 ? 'receso' : 'en-vivo'
+            if (estado === 'en-vivo') {
+              eventoActivo = { ...evento, estado } as EventoConEstado
+              break
+            }
+          } else if (minutos >= horaFin) {
+            estado = 'pasado'
+          }
+        }
+      }
+
+      // Lógica de modal: detectar cambios en evento activo
+      if (eventoActivo && eventoActivo.id !== previousActivePonenciaRef.current) {
+        setActivePonenciaId(eventoActivo.id)
+        setMostrarModal(true)
+        previousActivePonenciaRef.current = eventoActivo.id
+      } else if (!eventoActivo && previousActivePonenciaRef.current) {
+        previousActivePonenciaRef.current = null
+        setActivePonenciaId(null)
+      }
+
+      // Calcular estado de eventos para el día actual (UI)
       const eventosDelDia = cronogramaEventos[diaActual] || []
       const eventosActualizados = eventosDelDia.map((evento) => {
         const horaInicio = convertirHoraAMinutos(evento.horaInicio)
@@ -70,14 +129,69 @@ export default function Page() {
     }
 
     actualizarTiempo()
-    const intervalo = setInterval(actualizarTiempo, 30000) // Cada 30 segundos
+    const intervalo = setInterval(actualizarTiempo, 10000) // Cada 10 segundos
     return () => clearInterval(intervalo)
   }, [diaActual])
 
   const tieneEnVivo = eventosConEstado.some((e) => e.estado === 'en-vivo')
+  const eventoModalActual = activePonenciaId
+    ? eventosConEstado.find((e) => e.id === activePonenciaId)
+    : null
 
   return (
     <main className="min-h-screen bg-white">
+      {/* Modal Alerta de Ponencia EN VIVO */}
+      {mostrarModal && eventoModalActual && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 p-4">
+          <div className="w-full max-w-md rounded-lg border-2 border-gray-200 bg-white p-8 shadow-2xl">
+            {/* Indicador EN VIVO */}
+            <div className="mb-4 flex items-center justify-center gap-2">
+              <span className="inline-block h-3 w-3 animate-pulse rounded-full bg-red-500"></span>
+              <span className="font-bold text-gray-900">EN VIVO AHORA</span>
+            </div>
+
+            {/* Contenido */}
+            <div className="mb-6 text-center">
+              <h2 className="mb-3 text-xl font-bold text-gray-900">
+                {previousActivePonenciaRef.current === eventoModalActual.id
+                  ? '¡El evento está comenzando!'
+                  : 'Ha comenzado una nueva ponencia'}
+              </h2>
+              <p className="mb-2 font-semibold text-gray-700">
+                {eventoModalActual.titulo}
+              </p>
+              <p className="text-sm text-gray-600">
+                {eventoModalActual.horaInicio} - {eventoModalActual.horaFin}
+              </p>
+              {eventoModalActual.expositores.length > 0 && (
+                <p className="mt-2 text-sm text-gray-600">
+                  <strong>Expositores:</strong> {eventoModalActual.expositores.join(', ')}
+                </p>
+              )}
+            </div>
+
+            {/* Botones */}
+            <div className="flex gap-3">
+              <button
+                onClick={() => setMostrarModal(false)}
+                className="flex-1 rounded-lg border-2 border-gray-300 px-4 py-3 font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-50"
+              >
+                Recordarme después
+              </button>
+              <a
+                href={eventoModalActual.linkTransmision}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 rounded-lg px-4 py-3 font-semibold text-white transition-all duration-200 hover:shadow-lg"
+                style={{ backgroundColor: '#E5820C' }}
+              >
+                Ir a la Transmisión
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Hero Section */}
       <section className="border-b border-gray-200 bg-gradient-to-r from-white via-orange-50 to-white px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
         <div className="mx-auto max-w-6xl">
