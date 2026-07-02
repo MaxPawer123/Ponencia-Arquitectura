@@ -19,7 +19,7 @@ export const cronogramaEventos: CronogramaEventos = {
     {
       id: 'jue02-1',
       horaInicio: '14:30',
-      horaFin: '15:10',
+      horaFin: '15:45',
       titulo: 'Evento Prueba del RTP 1',
       expositores: ['Personal del CRTP'],
       linkTransmision: 'https://meet.google.com/amr-iqng-bdv',
