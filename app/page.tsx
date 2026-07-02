@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { QRCodeSVG } from 'qrcode.react'
+import { Clock } from 'lucide-react'
 import { cronogramaEventos, convertirHoraAMinutos } from '@/lib/cronograma'
 import type { Evento } from '@/lib/cronograma'
 
@@ -101,6 +102,8 @@ interface ModalAlertConfig {
   nombrePonencia: string
   expositores?: string[]
   lugar?: string
+  horaInicio?: string
+  horaFin?: string
 }
 
 export default function Page() {
@@ -189,7 +192,9 @@ export default function Page() {
             id: ponenciaEnVivo.id,
             nombrePonencia: ponenciaEnVivo.titulo,
             expositores: ponenciaEnVivo.expositores,
-            lugar: ponenciaEnVivo.lugar
+            lugar: ponenciaEnVivo.lugar,
+            horaInicio: ponenciaEnVivo.horaInicio,
+            horaFin: ponenciaEnVivo.horaFin
           })
         } else {
           // B. Cambio de bloque: finalizó una y empezó inmediatamente la siguiente
@@ -205,7 +210,9 @@ export default function Page() {
             id: ponenciaEnVivo.id,
             nombrePonencia: ponenciaEnVivo.titulo,
             expositores: ponenciaEnVivo.expositores,
-            lugar: ponenciaEnVivo.lugar
+            lugar: ponenciaEnVivo.lugar,
+            horaInicio: ponenciaEnVivo.horaInicio,
+            horaFin: ponenciaEnVivo.horaFin
           })
         }
       } else {
@@ -307,6 +314,7 @@ export default function Page() {
                 onClick={() => {
                   setDiaActual(dia)
                   setQrAbierto(null)
+                  setModalConfig(null)
                 }}
                 className={`rounded-lg px-4 py-2 font-semibold transition-all duration-200 lg:px-6 lg:py-3 cursor-pointer ${diaActual === dia
                   ? 'text-white shadow-md'
@@ -369,8 +377,8 @@ export default function Page() {
               </div>
 
               {/* Body */}
-              <div className="space-y-2">
-                <h3 className="text-lg font-bold text-gray-900 leading-tight">
+              <div className="space-y-3.5">
+                <h3 className="text-lg font-extrabold text-gray-900 leading-tight">
                   {modalConfig.titulo}
                 </h3>
 
@@ -380,19 +388,45 @@ export default function Page() {
                   </p>
                 )}
 
-                <div className="rounded-lg bg-orange-50/50 p-4 border border-orange-100">
-                  <h4 className="font-bold text-gray-900 text-sm md:text-base">
+                {/* Fila destacada justo debajo del título */}
+                <div className="flex items-center gap-2 rounded-lg bg-orange-100/60 px-3.5 py-2.5 border border-orange-200">
+                  <Clock className="h-5 w-5 text-orange-600 animate-pulse shrink-0" />
+                  <span className="text-sm font-bold text-neutral-900">
+                    Horario de Transmisión: <span className="font-extrabold text-black">{modalConfig.horaInicio} - {modalConfig.horaFin}</span>
+                  </span>
+                </div>
+
+                {/* Caja color crema con orden jerárquico */}
+                <div className="rounded-xl bg-[#FAF6F0] p-5 border border-amber-200/60 shadow-inner space-y-3">
+                  {/* 1. Título de la Ponencia */}
+                  <h4 className="text-base font-extrabold text-gray-900 leading-snug">
                     {modalConfig.nombrePonencia}
                   </h4>
+
+                  {/* 2. 🕒 Horario: 14:00 - 15:30 (Resaltado) */}
+                  <div className="flex items-center gap-2 text-neutral-950 font-bold text-xs bg-amber-100/50 px-2.5 py-1 rounded-md w-fit border border-amber-200/50">
+                    <Clock className="h-3.5 w-3.5 text-amber-700" />
+                    <span>Horario: {modalConfig.horaInicio} - {modalConfig.horaFin}</span>
+                  </div>
+
+                  {/* 3. 🎙️ Expositores */}
                   {modalConfig.expositores && modalConfig.expositores.length > 0 && (
-                    <p className="mt-1.5 text-xs md:text-sm text-gray-600">
-                      🎙️ {modalConfig.expositores.join(', ')}
-                    </p>
+                    <div className="text-xs md:text-sm text-gray-600 flex items-start gap-1.5">
+                      <span className="shrink-0 text-gray-500">🎙️</span>
+                      <p>
+                        <strong className="font-semibold text-gray-700">Expositores:</strong> {modalConfig.expositores.join(', ')}
+                      </p>
+                    </div>
                   )}
+
+                  {/* 4. 📍 Lugar / Auditorio */}
                   {modalConfig.lugar && (
-                    <p className="mt-1 text-xs text-gray-500">
-                      📍 {modalConfig.lugar}
-                    </p>
+                    <div className="text-xs text-gray-500 flex items-start gap-1.5">
+                      <span className="shrink-0 text-gray-400">📍</span>
+                      <p>
+                        <strong className="font-semibold text-gray-600">Lugar:</strong> {modalConfig.lugar}
+                      </p>
+                    </div>
                   )}
                 </div>
               </div>
@@ -576,13 +610,21 @@ function EventoCard({ evento, qrAbierto, onQrToggle }: EventoCardProps) {
 
       {/* QR Modal */}
       {qrAbierto === evento.id && esEnVivo && (
-        <div className="absolute bottom-16 right-0 z-50 rounded-lg border-2 border-gray-200 bg-white p-4 shadow-xl lg:bottom-auto lg:top-full lg:mt-2">
-          <QRCodeSVG
-            value={evento.linkTransmision}
-            size={120}
-            level="H"
-            includeMargin={true}
-          />
+        <div className="absolute bottom-16 right-0 z-50 rounded-lg border-2 border-gray-200 bg-white p-4 shadow-xl lg:bottom-auto lg:top-full lg:mt-2 min-w-[150px] flex flex-col items-center justify-center">
+          {evento.qrCode ? (
+            <img
+              src={evento.qrCode}
+              alt="Código QR de la transmisión"
+              className="h-[120px] w-[120px] object-contain mx-auto"
+            />
+          ) : (
+            <QRCodeSVG
+              value={evento.linkTransmision}
+              size={120}
+              level="H"
+              includeMargin={true}
+            />
+          )}
           <p className="mt-2 text-center text-xs font-semibold text-gray-600">Escanea para entrar</p>
         </div>
       )}

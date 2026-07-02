@@ -7,6 +7,7 @@ export interface Evento {
   linkTransmision: string
   lugar?: string
   enfoque?: string
+  qrCode?: string
 }
 
 export interface CronogramaEventos {
@@ -17,23 +18,25 @@ export const cronogramaEventos: CronogramaEventos = {
   jueves02: [
     {
       id: 'jue02-1',
-      horaInicio: '13:30',
+      horaInicio: '14:00',
       horaFin: '15:00',
-      titulo: 'Mesa de Trabajo: Optimización del Perfil de Egreso y Taller Arquitectónico ante la Complejidad Laboral',
-      expositores: ['MSc. Arq. Williams Terrazas', 'Arq. Salomón Espejo'],
-      linkTransmision: 'https://meet.google.com/abc-defg-hij',
-      lugar: 'Auditorio Principal',
-      enfoque: 'SESIÓN DE PRUEBAS EN TIEMPO REAL - FAADU'
+      titulo: 'Evento Prueba del RTP 1',
+      expositores: ['Personal del CRTP'],
+      linkTransmision: 'https://meet.google.com/fbt-aidm-wut',
+      lugar: 'Previos de CRTP',
+      enfoque: 'SESIÓN DE PRUEBAS EN TIEMPO REAL - FAADU',
+      qrCode: 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://meet.google.com/fbt-aidm-wut'
     },
     {
       id: 'jue02-2',
       horaInicio: '15:00',
       horaFin: '16:00',
-      titulo: 'Conclusiones de la Reforma Curricular: Herramientas Digitales e Inteligencia Artificial en el Diseño Contemporáneo',
-      expositores: ['Coordinadores Académicos FAADU'],
-      linkTransmision: 'https://meet.google.com/abc-defg-hij',
-      lugar: 'Auditorio Principal',
-      enfoque: 'SESIÓN DE PRUEBAS EN TIEMPO REAL - FAADU'
+      titulo: 'Evento Prueba del RTP 2',
+      expositores: ['Personal del CRTP'],
+      linkTransmision: 'https://meet.google.com/fbt-aidm-wut',
+      lugar: 'Previos de CRTP',
+      enfoque: 'SESIÓN DE PRUEBAS EN TIEMPO REAL - FAADU',
+      qrCode: 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://meet.google.com/fbt-aidm-wut'
     }
   ],
   lunes: [
