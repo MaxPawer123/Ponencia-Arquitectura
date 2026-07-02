@@ -12,8 +12,9 @@ interface EventoConEstado extends Evento {
   estado: EstadoEvento
 }
 
-const DIAS_SEMANA = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'lunes13'] as const
+const DIAS_SEMANA = ['jueves02', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'lunes13'] as const
 const ETIQUETAS_DIAS = {
+  jueves02: 'Jueves 02',
   lunes: 'Lunes 06',
   martes: 'Martes 07',
   miercoles: 'Miércoles 08',
@@ -25,7 +26,8 @@ const ETIQUETAS_DIAS = {
 // Configuración de fechas en el calendario 2026 para cada pestaña del cronograma
 // Año: 2026, Mes: 6 (Julio en Javascript, 0-indexed)
 const MAPA_FECHAS_DIAS: Record<string, { year: number; month: number; date: number }> = {
-  lunes: { year: 2026, month: 6, date: 2 },     // 6 de Julio de 2026
+  jueves02: { year: 2026, month: 6, date: 2 },  // 2 de Julio de 2026 (HOY)
+  lunes: { year: 2026, month: 6, date: 6 },     // 6 de Julio de 2026
   martes: { year: 2026, month: 6, date: 7 },    // 7 de Julio de 2026
   miercoles: { year: 2026, month: 6, date: 8 }, // 8 de Julio de 2026
   jueves: { year: 2026, month: 6, date: 9 },    // 9 de Julio de 2026

@@ -14,6 +14,28 @@ export interface CronogramaEventos {
 }
 
 export const cronogramaEventos: CronogramaEventos = {
+  jueves02: [
+    {
+      id: 'jue02-1',
+      horaInicio: '13:30',
+      horaFin: '15:00',
+      titulo: 'Mesa de Trabajo: Optimización del Perfil de Egreso y Taller Arquitectónico ante la Complejidad Laboral',
+      expositores: ['MSc. Arq. Williams Terrazas', 'Arq. Salomón Espejo'],
+      linkTransmision: 'https://meet.google.com/abc-defg-hij',
+      lugar: 'Auditorio Principal',
+      enfoque: 'SESIÓN DE PRUEBAS EN TIEMPO REAL - FAADU'
+    },
+    {
+      id: 'jue02-2',
+      horaInicio: '15:00',
+      horaFin: '16:00',
+      titulo: 'Conclusiones de la Reforma Curricular: Herramientas Digitales e Inteligencia Artificial en el Diseño Contemporáneo',
+      expositores: ['Coordinadores Académicos FAADU'],
+      linkTransmision: 'https://meet.google.com/abc-defg-hij',
+      lugar: 'Auditorio Principal',
+      enfoque: 'SESIÓN DE PRUEBAS EN TIEMPO REAL - FAADU'
+    }
+  ],
   lunes: [
     {
       id: 'lun-1',
@@ -269,6 +291,7 @@ export const cronogramaEventos: CronogramaEventos = {
 
 // Convertir nombres de días a números ISO (0 = domingo, 1 = lunes, etc.)
 export const diasSemana = {
+  jueves02: 4,
   lunes: 1,
   martes: 2,
   miercoles: 3,
