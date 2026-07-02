@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { QRCodeSVG } from 'qrcode.react'
-import { Clock } from 'lucide-react'
+import { Calendar, Clock } from 'lucide-react'
 import { cronogramaEventos, convertirHoraAMinutos } from '@/lib/cronograma'
 import type { Evento } from '@/lib/cronograma'
 
@@ -405,8 +405,15 @@ export default function Page() {
 
                   {/* 2. 🕒 Horario: 14:00 - 15:30 (Resaltado) */}
                   <div className="flex items-center gap-2 text-neutral-950 font-bold text-xs bg-amber-100/50 px-2.5 py-1 rounded-md w-fit border border-amber-200/50">
+                    <Calendar className="h-3.5 w-3.5 text-amber-700" />
+                    <span>Fecha: Jueves 02/07/2026</span>
+                  </div>
+
+
+                  <div className="flex items-center gap-2 text-neutral-950 font-bold text-xs bg-amber-100/50 px-2.5 py-1 rounded-md w-fit border border-amber-200/50">
                     <Clock className="h-3.5 w-3.5 text-amber-700" />
-                    <span>Horario: {modalConfig.horaInicio} - {modalConfig.horaFin}</span>
+                    <span>
+                    Horario: {modalConfig.horaInicio} - {modalConfig.horaFin}</span>
                   </div>
 
                   {/* 3. 🎙️ Expositores */}

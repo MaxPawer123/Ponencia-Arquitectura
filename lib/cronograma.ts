@@ -22,10 +22,10 @@ export const cronogramaEventos: CronogramaEventos = {
       horaFin: '15:00',
       titulo: 'Evento Prueba del RTP 1',
       expositores: ['Personal del CRTP'],
-      linkTransmision: 'https://meet.google.com/fbt-aidm-wut',
+      linkTransmision: 'https://meet.google.com/njx-sfjg-uii',
       lugar: 'Previos de CRTP',
       enfoque: 'SESIÓN DE PRUEBAS EN TIEMPO REAL - FAADU',
-      qrCode: 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://meet.google.com/fbt-aidm-wut'
+      qrCode: 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://meet.google.com/njx-sfjg-uii'
     },
     {
       id: 'jue02-2',
@@ -33,10 +33,10 @@ export const cronogramaEventos: CronogramaEventos = {
       horaFin: '16:00',
       titulo: 'Evento Prueba del RTP 2',
       expositores: ['Personal del CRTP'],
-      linkTransmision: 'https://meet.google.com/fbt-aidm-wut',
+      linkTransmision: 'https://meet.google.com/njx-sfjg-uii',
       lugar: 'Previos de CRTP',
       enfoque: 'SESIÓN DE PRUEBAS EN TIEMPO REAL - FAADU',
-      qrCode: 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://meet.google.com/fbt-aidm-wut'
+      qrCode: 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://meet.google.com/njx-sfjg-uii'
     }
   ],
   lunes: [
