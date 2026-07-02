@@ -57,7 +57,7 @@ export const cronogramaEventos: CronogramaEventos = {
     {
       id: 'lun-5',
       horaInicio: '11:30',
-      horaFin: '12:00',
+      horaFin: '13:46',
       titulo: 'Preguntas y Respuestas',
       expositores: ['Panelistas'],
       linkTransmision: 'https://meet.google.com/pzk-kmcj-rjk',
@@ -178,7 +178,7 @@ export const cronogramaEventos: CronogramaEventos = {
     {
       id: 'jue-4',
       horaInicio: '12:00',
-      horaFin: '13:00',
+      horaFin: '13:35',
       titulo: 'Visita Virtual: Casos de Estudio Locales',
       expositores: ['Arq. Guía', 'Especialista en Patrimonio'],
       linkTransmision: 'https://meet.google.com/pzk-kmcj-rjk',
