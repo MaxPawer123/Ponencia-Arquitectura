@@ -6,13 +6,15 @@ import { QRCodeSVG } from 'qrcode.react'
 import { cronogramaEventos, convertirHoraAMinutos } from '@/lib/cronograma'
 import type { Evento } from '@/lib/cronograma'
 
-type EstadoEvento = 'en-vivo' | 'proximo' | 'pasado' | 'receso'
+// ============================================================================
+// DEBUG MODE: Cambiar a true para simular una fecha/hora específica
+// ============================================================================
+const SIMULATE_LIVE_DATE = false
+const SIMULATED_DATE = new Date(2025, 8, 10, 10, 45) // Viernes 10 Septiembre 10:45
 
-interface EventoConEstado extends Evento {
-  estado: EstadoEvento
-}
-
-// Mapeo de días de la semana con fechas reales (8-13 de Septiembre 2025)
+// ============================================================================
+// CONFIGURACIÓN DE FECHAS REALES DEL EVENTO (6-13 de Septiembre 2025)
+// ============================================================================
 const DIAS_SEMANA = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'lunes13'] as const
 const ETIQUETAS_DIAS = {
   lunes: 'Lunes 06',
@@ -23,8 +25,9 @@ const ETIQUETAS_DIAS = {
   lunes13: 'Lunes 13'
 }
 
-// Fechas reales del evento (8-13 de Septiembre 2025)
-const FECHA_EVENTO = {
+// Fechas reales del evento (6-13 de Septiembre 2025)
+// Nota: Mes 8 en JS = Septiembre (0-indexado)
+const FECHA_EVENTO: Record<typeof DIAS_SEMANA[number], Date> = {
   lunes: new Date(2025, 8, 6),      // 6 septiembre
   martes: new Date(2025, 8, 7),     // 7 septiembre
   miercoles: new Date(2025, 8, 8),  // 8 septiembre
@@ -33,106 +36,190 @@ const FECHA_EVENTO = {
   lunes13: new Date(2025, 8, 13)    // 13 septiembre
 }
 
+type EstadoEvento = 'en-vivo' | 'proximo' | 'pasado' | 'receso'
+
+interface EventoConEstado extends Evento {
+  estado: EstadoEvento
+}
+
+/**
+ * Compara dos fechas ignorando la hora (solo compara año, mes, día)
+ */
+function sonfechasIguales(fecha1: Date, fecha2: Date): boolean {
+  return (
+    fecha1.getFullYear() === fecha2.getFullYear() &&
+    fecha1.getMonth() === fecha2.getMonth() &&
+    fecha1.getDate() === fecha2.getDate()
+  )
+}
+
+/**
+ * Obtiene la fecha actual, considerando el modo de simulación para debug
+ */
+function getAhora(): Date {
+  if (SIMULATE_LIVE_DATE) {
+    console.log('[DEBUG] Usando fecha simulada:', SIMULATED_DATE.toLocaleString())
+    return new Date(SIMULATED_DATE)
+  }
+  return new Date()
+}
+
+/**
+ * Determina si el día seleccionado en la UI coincide con el día real del sistema
+ */
+function diaSeleccionadoEsHoy(
+  diaSeleccionado: typeof DIAS_SEMANA[number],
+  fechaActual: Date
+): boolean {
+  const fechaDiaSeleccionado = FECHA_EVENTO[diaSeleccionado]
+  return sonfechasIguales(fechaActual, fechaDiaSeleccionado)
+}
+
 export default function Page() {
-  const [diaActual, setDiaActual] = useState<typeof DIAS_SEMANA[number]>('lunes')
+  // ========================================================================
+  // ESTADO
+  // ========================================================================
+  const [diaSeleccionado, setDiaSeleccionado] = useState<typeof DIAS_SEMANA[number]>('lunes')
   const [horaActual, setHoraActual] = useState<number>(0)
   const [eventosConEstado, setEventosConEstado] = useState<EventoConEstado[]>([])
   const [qrAbierto, setQrAbierto] = useState<string | null>(null)
   const [activePonenciaId, setActivePonenciaId] = useState<string | null>(null)
   const [mostrarModal, setMostrarModal] = useState(false)
+  const [fechaActual, setFechaActual] = useState<Date>(getAhora())
+
+  // Refs para tracking de estado global (independiente del día seleccionado)
   const previousActivePonenciaRef = useRef<string | null>(null)
+  const ultimaFechaValidadaRef = useRef<Date>(getAhora())
 
-  // Detectar día actual y hora al montar
+  // ========================================================================
+  // EFECTO 1: Detectar qué día mostrar por defecto en la UI
+  // ========================================================================
   useEffect(() => {
-    const hoy = new Date()
-    const diaIso = hoy.getDay()
-    // Mapear ISO day (0=domingo, 1=lunes, etc.) a nuestros días
-    let diaSeleccionado: typeof DIAS_SEMANA[number] = 'lunes'
-    if (diaIso === 1) diaSeleccionado = 'lunes'
-    else if (diaIso === 2) diaSeleccionado = 'martes'
-    else if (diaIso === 3) diaSeleccionado = 'miercoles'
-    else if (diaIso === 4) diaSeleccionado = 'jueves'
-    else if (diaIso === 5) diaSeleccionado = 'viernes'
-    else if (diaIso === 6) diaSeleccionado = 'lunes13' // Si es sábado, mostrar el lunes 13
+    const ahora = getAhora()
+    let diaParaMostrar: typeof DIAS_SEMANA[number] = 'lunes'
 
-    setDiaActual(diaSeleccionado)
+    // Buscar cuál día del evento es hoy
+    for (const dia of DIAS_SEMANA) {
+      if (diaSeleccionadoEsHoy(dia, ahora)) {
+        diaParaMostrar = dia
+        break
+      }
+    }
+
+    setDiaSeleccionado(diaParaMostrar)
   }, [])
 
-  // Timer en tiempo real cada 10 segundos
+  // ========================================================================
+  // EFECTO 2: Timer en tiempo real que actualiza CADA SEGUNDO
+  // Responsable de:
+  // - Validar qué evento está EN VIVO en tiempo real
+  // - Mostrar modal cuando comienza un evento
+  // - Actualizar hora en la UI
+  // ========================================================================
   useEffect(() => {
-    const actualizarTiempo = () => {
-      const ahora = new Date()
+    const actualizarTiempoReal = () => {
+      const ahora = getAhora()
       const minutos = ahora.getHours() * 60 + ahora.getMinutes()
+
+      setFechaActual(ahora)
       setHoraActual(minutos)
 
-      // Validación ESTRICTA: día actual + hora del sistema
-      const diaIso = ahora.getDay()
-      let diaActualValidado: typeof DIAS_SEMANA[number] | null = null
+      // ====================================================================
+      // VALIDACIÓN ESTRICTA DE "EN VIVO": 3 CONDICIONES SIMULTÁNEAS
+      // ====================================================================
+      // 1. El día real del sistema debe coincidir con una fecha del evento
+      // 2. Ese día real debe tener eventos en el cronograma
+      // 3. La hora actual debe estar dentro del rango horaInicio-horaFin
+      // ====================================================================
 
-      // Mapear día ISO a nuestros días SOLO si la fecha coincide
-      if (diaIso === 1) diaActualValidado = 'lunes'
-      else if (diaIso === 2) diaActualValidado = 'martes'
-      else if (diaIso === 3) diaActualValidado = 'miercoles'
-      else if (diaIso === 4) diaActualValidado = 'jueves'
-      else if (diaIso === 5) diaActualValidado = 'viernes'
-      else if (diaIso === 6) diaActualValidado = 'lunes13'
+      let eventoActivoEnElSistema: EventoConEstado | null = null
 
-      // Buscar evento activo SOLO en el día validado del sistema
-      let eventoActivo: EventoConEstado | null = null
-      
-      if (diaActualValidado) {
-        const eventosDelDia = cronogramaEventos[diaActualValidado] || []
-        for (const evento of eventosDelDia) {
-          const horaInicio = convertirHoraAMinutos(evento.horaInicio)
-          const horaFin = convertirHoraAMinutos(evento.horaFin)
+      // Buscar el día que coincide con hoy
+      for (const dia of DIAS_SEMANA) {
+        if (diaSeleccionadoEsHoy(dia, ahora)) {
+          // El día del sistema coincide con este día del evento
+          const eventosDelDiaReal = cronogramaEventos[dia] || []
 
-          let estado: EstadoEvento = 'proximo'
-          if (minutos >= horaInicio && minutos < horaFin) {
-            estado = evento.expositores.length === 0 ? 'receso' : 'en-vivo'
-            if (estado === 'en-vivo') {
-              eventoActivo = { ...evento, estado } as EventoConEstado
+          for (const evento of eventosDelDiaReal) {
+            const horaInicio = convertirHoraAMinutos(evento.horaInicio)
+            const horaFin = convertirHoraAMinutos(evento.horaFin)
+
+            // Solo si la hora está en el rango Y hay expositores
+            if (minutos >= horaInicio && minutos < horaFin && evento.expositores.length > 0) {
+              eventoActivoEnElSistema = { ...evento, estado: 'en-vivo' } as EventoConEstado
               break
             }
-          } else if (minutos >= horaFin) {
-            estado = 'pasado'
           }
+          break
         }
       }
 
-      // Lógica de modal: detectar cambios en evento activo
-      if (eventoActivo && eventoActivo.id !== previousActivePonenciaRef.current) {
-        setActivePonenciaId(eventoActivo.id)
+      // ====================================================================
+      // LÓGICA DE MODALES: Detectar transiciones de eventos
+      // ====================================================================
+      if (
+        eventoActivoEnElSistema &&
+        eventoActivoEnElSistema.id !== previousActivePonenciaRef.current
+      ) {
+        // Un nuevo evento comenzó
+        setActivePonenciaId(eventoActivoEnElSistema.id)
         setMostrarModal(true)
-        previousActivePonenciaRef.current = eventoActivo.id
-      } else if (!eventoActivo && previousActivePonenciaRef.current) {
+        previousActivePonenciaRef.current = eventoActivoEnElSistema.id
+      } else if (!eventoActivoEnElSistema && previousActivePonenciaRef.current) {
+        // El evento que estaba activo terminó
         previousActivePonenciaRef.current = null
         setActivePonenciaId(null)
       }
 
-      // Calcular estado de eventos para el día actual (UI)
-      const eventosDelDia = cronogramaEventos[diaActual] || []
-      const eventosActualizados = eventosDelDia.map((evento) => {
-        const horaInicio = convertirHoraAMinutos(evento.horaInicio)
-        const horaFin = convertirHoraAMinutos(evento.horaFin)
-
-        let estado: EstadoEvento = 'proximo'
-        if (minutos >= horaInicio && minutos < horaFin) {
-          estado = evento.expositores.length === 0 ? 'receso' : 'en-vivo'
-        } else if (minutos >= horaFin) {
-          estado = 'pasado'
-        }
-
-        return { ...evento, estado } as EventoConEstado
-      })
-
-      setEventosConEstado(eventosActualizados)
+      ultimaFechaValidadaRef.current = ahora
     }
 
-    actualizarTiempo()
-    const intervalo = setInterval(actualizarTiempo, 10000) // Cada 10 segundos
+    actualizarTiempoReal()
+    const intervalo = setInterval(actualizarTiempoReal, 1000) // Cada 1 segundo para máxima precisión
     return () => clearInterval(intervalo)
-  }, [diaActual])
+  }, [])
 
+  // ========================================================================
+  // EFECTO 3: Actualizar eventos mostrados en la UI cuando cambia el día
+  // seleccionado o la hora. IMPORTANTE: La lógica de "EN VIVO" solo aplica
+  // si el día seleccionado es HOY, de lo contrario todos serán "próximo/pasado"
+  // ========================================================================
+  useEffect(() => {
+    const ahora = getAhora()
+    const minutos = ahora.getHours() * 60 + ahora.getMinutes()
+
+    const eventosDelDia = cronogramaEventos[diaSeleccionado] || []
+    const eventosActualizados = eventosDelDia.map((evento) => {
+      const horaInicio = convertirHoraAMinutos(evento.horaInicio)
+      const horaFin = convertirHoraAMinutos(evento.horaFin)
+
+      let estado: EstadoEvento = 'proximo'
+
+      // CRÍTICO: Solo mostrar "EN VIVO" si el día seleccionado es HOY
+      const diaSeleccionadoEsHoy = diaSeleccionadoEsHoy(diaSeleccionado, ahora)
+
+      if (diaSeleccionadoEsHoy && minutos >= horaInicio && minutos < horaFin) {
+        // El día seleccionado es hoy Y la hora está en rango
+        estado = evento.expositores.length === 0 ? 'receso' : 'en-vivo'
+      } else if (diaSeleccionadoEsHoy && minutos >= horaFin) {
+        // El día seleccionado es hoy Y la hora ya pasó
+        estado = 'pasado'
+      } else if (!diaSeleccionadoEsHoy) {
+        // El día seleccionado NO es hoy, determinar si es futuro o pasado
+        const fechaDiaSeleccionado = FECHA_EVENTO[diaSeleccionado]
+        const esAnteriorAHoy = fechaDiaSeleccionado < ahora
+        estado = esAnteriorAHoy ? 'pasado' : 'proximo'
+      }
+
+      return { ...evento, estado } as EventoConEstado
+    })
+
+    setEventosConEstado(eventosActualizados)
+  }, [diaSeleccionado, horaActual])
+
+  // ========================================================================
+  // CÁLCULOS
+  // ========================================================================
   const tieneEnVivo = eventosConEstado.some((e) => e.estado === 'en-vivo')
   const eventoModalActual = activePonenciaId
     ? eventosConEstado.find((e) => e.id === activePonenciaId)
@@ -255,16 +342,16 @@ export default function Page() {
               <button
                 key={dia}
                 onClick={() => {
-                  setDiaActual(dia)
+                  setDiaSeleccionado(dia)
                   setQrAbierto(null)
                 }}
                 className={`rounded-lg px-4 py-2 font-semibold transition-all duration-200 lg:px-6 lg:py-3 ${
-                  diaActual === dia
+                  diaSeleccionado === dia
                     ? 'text-white'
                     : 'border-2 border-gray-300 bg-white text-gray-700 hover:border-orange-300 hover:text-orange-600'
                 }`}
                 style={
-                  diaActual === dia
+                  diaSeleccionado === dia
                     ? { backgroundColor: '#E5820C' }
                     : {}
                 }
