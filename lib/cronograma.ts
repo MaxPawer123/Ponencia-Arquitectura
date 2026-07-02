@@ -18,22 +18,22 @@ export const cronogramaEventos: CronogramaEventos = {
   jueves02: [
     {
       id: 'jue02-1',
-      horaInicio: '14:00',
-      horaFin: '15:00',
+      horaInicio: '14:30',
+      horaFin: '15:10',
       titulo: 'Evento Prueba del RTP 1',
       expositores: ['Personal del CRTP'],
-      linkTransmision: 'https://meet.google.com/njx-sfjg-uii',
+      linkTransmision: 'https://meet.google.com/amr-iqng-bdv',
       lugar: 'Previos de CRTP',
       enfoque: 'SESIÓN DE PRUEBAS EN TIEMPO REAL - FAADU',
       qrCode: 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://meet.google.com/njx-sfjg-uii'
     },
     {
       id: 'jue02-2',
-      horaInicio: '15:00',
-      horaFin: '16:00',
+      horaInicio: '16:15',
+      horaFin: '17:00',
       titulo: 'Evento Prueba del RTP 2',
       expositores: ['Personal del CRTP'],
-      linkTransmision: 'https://meet.google.com/njx-sfjg-uii',
+      linkTransmision: 'https://meet.google.com/amr-iqng-bdv',
       lugar: 'Previos de CRTP',
       enfoque: 'SESIÓN DE PRUEBAS EN TIEMPO REAL - FAADU',
       qrCode: 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://meet.google.com/njx-sfjg-uii'
@@ -42,23 +42,23 @@ export const cronogramaEventos: CronogramaEventos = {
   lunes: [
     {
       id: 'lun-1',
-      horaInicio: '08:00',
-      horaFin: '08:30',
-      titulo: 'Bienvenida Oficial - Inauguración del Evento de Ponencias',
-      expositores: ['Directora FAADU', 'Coordinadores Académicos'],
+      horaInicio: '10:30',
+      horaFin: '11:00',
+      titulo: 'Del Modelo Declarativo a la Operatividad Socioformativa: Propuesta del Perfil de Egreso y Profesional del Arquitecto FAADU-UMSA 2026 ante la Complejidad Territorial y Laboral del Siglo XXI',
+      expositores: ['Fabiola Zaballa, Paola Carvallo, Silvia Bustos, Humberto Candia, Manuel Ascarrunz, Jahdiel Villafuerte, Leonor Cuevas.'],
       linkTransmision: 'https://meet.google.com/pzk-kmcj-rjk',
-      lugar: 'Auditorio Principal',
+      lugar: '',
       enfoque: 'Apertura'
     },
     {
       id: 'lun-2',
-      horaInicio: '08:30',
-      horaFin: '10:00',
-      titulo: 'Del Modelo Declarativo a la Operatividad Socioformativa: Propuesta del Perfil de Egreso y Profesional del Arquitecto FAADU-UMSA 2026',
+      horaInicio: '11:00',
+      horaFin: '11:30',
+      titulo: 'EL PERFIL PROFESIONAL DEL ARQUITECTO EN LA FAADU-UMSA: Una reflexión crítica desde las demandas contemporáneas de la disciplina y la sociedad.',
       expositores: ['Arq. Dr. Fernando Córdoba', 'Arq. Marta Villanueva', 'Arq. Ramiro Castillo'],
       linkTransmision: 'https://meet.google.com/pzk-kmcj-rjk',
-      lugar: 'Auditorio Principal',
-      enfoque: 'Perfil - Competencias'
+      lugar: 'Sala virtual',
+      enfoque: ''
     },
     {
       id: 'lun-3',
