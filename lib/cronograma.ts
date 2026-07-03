@@ -4,10 +4,10 @@ export interface Evento {
   horaFin: string
   titulo: string
   expositores: string[]
-  linkTransmision: string
+  linkFacebook: string
   lugar?: string
   enfoque?: string
-  qrCode?: string
+  qrFacebook?: string
 }
 
 export interface CronogramaEventos {
@@ -15,28 +15,28 @@ export interface CronogramaEventos {
 }
 
 export const cronogramaEventos: CronogramaEventos = {
-  jueves02: [
+  viernes03: [
     {
-      id: 'jue02-1',
-      horaInicio: '15:30',
-      horaFin: '16:00',
+      id: 'vier03-1',
+      horaInicio: '14:00',
+      horaFin: '15:00',
       titulo: 'Evento Prueba del RTP 1',
       expositores: ['Personal del CRTP'],
-      linkTransmision: 'https://meet.google.com/amr-iqng-bdv',
+      linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633',
       lugar: 'Previos de CRTP',
       enfoque: 'SESIÓN DE PRUEBAS EN TIEMPO REAL - FAADU',
-      qrCode: 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://meet.google.com/njx-sfjg-uii'
+      qrFacebook: 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://www.facebook.com/profile.php?id=100047802766633'
     },
     {
-      id: 'jue02-2',
-      horaInicio: '16:00',
-      horaFin: '17:00',
+      id: 'vier03-2',
+      horaInicio: '15:00',
+      horaFin: '16:00',
       titulo: 'Evento Prueba del RTP 2',
       expositores: ['Personal del CRTP'],
-      linkTransmision: 'https://meet.google.com/amr-iqng-bdv',
+      linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633',
       lugar: 'Previos de CRTP',
       enfoque: 'SESIÓN DE PRUEBAS EN TIEMPO REAL - FAADU',
-      qrCode: 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://meet.google.com/njx-sfjg-uii'
+      qrFacebook: 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://www.facebook.com/profile.php?id=100047802766633'
     }
   ],
   lunes: [
@@ -46,7 +46,7 @@ export const cronogramaEventos: CronogramaEventos = {
       horaFin: '11:00',
       titulo: 'Del Modelo Declarativo a la Operatividad Socioformativa: Propuesta del Perfil de Egreso y Profesional del Arquitecto FAADU-UMSA 2026 ante la Complejidad Territorial y Laboral del Siglo XXI',
       expositores: ['Fabiola Zaballa, Paola Carvallo, Silvia Bustos, Humberto Candia, Manuel Ascarrunz, Jahdiel Villafuerte, Leonor Cuevas.'],
-      linkTransmision: 'https://meet.google.com/pzk-kmcj-rjk',
+      linkFacebook: 'https://www.facebook.com/FAADU.UMSA/',
       lugar: '',
       enfoque: 'Apertura'
     },
@@ -55,38 +55,59 @@ export const cronogramaEventos: CronogramaEventos = {
       horaInicio: '11:00',
       horaFin: '11:30',
       titulo: 'EL PERFIL PROFESIONAL DEL ARQUITECTO EN LA FAADU-UMSA: Una reflexión crítica desde las demandas contemporáneas de la disciplina y la sociedad.',
-      expositores: ['Arq. Dr. Fernando Córdoba', 'Arq. Marta Villanueva', 'Arq. Ramiro Castillo'],
-      linkTransmision: 'https://meet.google.com/pzk-kmcj-rjk',
+      expositores: ['Arq. Ismael Carvajal Vogtschmidt'],
+      linkFacebook: '',
       lugar: 'Sala virtual',
-      enfoque: ''
+      enfoque: 'Perfil Profesional del Arquitecto'
     },
     {
       id: 'lun-3',
-      horaInicio: '10:00',
-      horaFin: '10:15',
-      titulo: 'Receso',
-      expositores: [],
-      linkTransmision: '',
-      lugar: 'Hall Central'
+      horaInicio: '11:30',
+      horaFin: '12:00',
+      titulo: 'PROPUESTA CONTEMPORÁNEA DE COMPETENCIAS PARA LA FORMACIÓN PROFESIONAL EN ARQUITECTURA A partir del documento Competencias Plan de Estudios 2008 y de referentes institucionales, globales y latinoamericanos',
+      expositores: ['MsC. Arq. Roberto Moreira Cordova'],
+      linkFacebook: '',
+      lugar: 'Sala Virtual'
     },
     {
       id: 'lun-4',
-      horaInicio: '10:15',
-      horaFin: '11:30',
-      titulo: 'Ponencia Especial: Arquitectura Sostenible y Diseño Contemporáneo',
-      expositores: ['Arq. Especialista Internacional'],
-      linkTransmision: 'https://meet.google.com/pzk-kmcj-rjk',
-      lugar: 'Auditorio Principal',
-      enfoque: 'Perfil - Competencias'
+      horaInicio: '12:00',
+      horaFin: '12:30',
+      titulo: 'PERFIL DE EGRESO Y PERFIL PROFESIONAL EN EL PROCESO DE REDISEÑO CURRICULAR DE LA CARRERA DE ARQUITECTURA',
+      expositores: ['MsC. Arq. Williams Terrazas'],
+      linkFacebook: '',
+      lugar: 'Sala Virtual',
+      enfoque: 'Perfil de Egreso y Perfil Profesional '
     },
     {
       id: 'lun-5',
-      horaInicio: '11:30',
-      horaFin: '13:46',
-      titulo: 'Preguntas y Respuestas',
-      expositores: ['Panelistas'],
-      linkTransmision: 'https://meet.google.com/pzk-kmcj-rjk',
-      lugar: 'Auditorio Principal'
+      horaInicio: '12:30',
+      horaFin: '13:00',
+      titulo: 'LÍDER CULTURAL: HACIA UN NUEVO  PERFIL DEL ARQUITECTO FAADU-UMSA',
+      expositores: ['Ezequiel Callisaya Sanchez Alison Angeles Gutierrez Condori Yerly Marupa Colque Jhael Massiel Ramirez Aguilar'],
+      linkFacebook: '',
+      lugar: 'Sala Virtual',
+      enfoque: 'Lider Cultural: Hacia un Nuevo Perfil del Arquitecto FAADU-UMSA'
+    },
+    {
+      id: 'lun-6',
+      horaInicio: '13:00',
+      horaFin: '13:30',
+      titulo: 'Conclusiones y debate',
+      expositores: [''],
+      linkFacebook: '',
+      lugar: '',
+      enfoque: ''
+    },
+    {
+      id: 'lun-7',
+      horaInicio: '13:00',
+      horaFin: '13:30',
+      titulo: 'Rediseño curricular en Artes Plasticas',
+      expositores: ['Dr. Arq. Gonzalo Edgar Salazar Antequera - Moderador, Ing. Franklin Cuevas - SECRETARIO DE ACTAS'],
+      linkFacebook: '',
+      lugar: '',
+      enfoque: ''
     }
   ],
   martes: [
@@ -96,7 +117,7 @@ export const cronogramaEventos: CronogramaEventos = {
       horaFin: '10:30',
       titulo: 'Taller Práctico: Metodología de Proyecto Arquitectónico',
       expositores: ['Arq. Taller 1', 'Arq. Taller 2'],
-      linkTransmision: 'https://meet.google.com/pzk-kmcj-rjk',
+      linkFacebook: 'https://www.facebook.com/FAADU.UMSA/',
       lugar: 'Salas de Taller A y B',
       enfoque: 'Taller - Proyecto'
     },
@@ -106,7 +127,7 @@ export const cronogramaEventos: CronogramaEventos = {
       horaFin: '10:45',
       titulo: 'Receso',
       expositores: [],
-      linkTransmision: '',
+      linkFacebook: '',
       lugar: 'Hall Central'
     },
     {
@@ -115,7 +136,7 @@ export const cronogramaEventos: CronogramaEventos = {
       horaFin: '12:00',
       titulo: 'Presentación de Proyectos Estudiantiles Destacados',
       expositores: ['Estudiantes FAADU', 'Jurado Evaluador'],
-      linkTransmision: 'https://meet.google.com/pzk-kmcj-rjk',
+      linkFacebook: 'https://www.facebook.com/FAADU.UMSA/',
       lugar: 'Auditorio Principal',
       enfoque: 'Taller - Proyecto'
     },
@@ -125,7 +146,7 @@ export const cronogramaEventos: CronogramaEventos = {
       horaFin: '13:00',
       titulo: 'Mesa Redonda: Desafíos del Proyecto Contemporáneo',
       expositores: ['Arq. Panelista 1', 'Arq. Panelista 2', 'Arq. Panelista 3'],
-      linkTransmision: 'https://meet.google.com/pzk-kmcj-rjk',
+      linkFacebook: 'https://www.facebook.com/FAADU.UMSA/',
       lugar: 'Auditorio Principal',
       enfoque: 'Taller - Proyecto'
     }
@@ -137,7 +158,7 @@ export const cronogramaEventos: CronogramaEventos = {
       horaFin: '10:30',
       titulo: 'Reforma Curricular FAADU: Nuevos Paradigmas Educativos',
       expositores: ['Comisión Curricular FAADU'],
-      linkTransmision: 'https://meet.google.com/pzk-kmcj-rjk',
+      linkFacebook: 'https://www.facebook.com/FAADU.UMSA/',
       lugar: 'Auditorio Principal',
       enfoque: 'Reforma Curricular'
     },
@@ -147,7 +168,7 @@ export const cronogramaEventos: CronogramaEventos = {
       horaFin: '10:45',
       titulo: 'Receso',
       expositores: [],
-      linkTransmision: '',
+      linkFacebook: '',
       lugar: 'Hall Central'
     },
     {
@@ -156,7 +177,7 @@ export const cronogramaEventos: CronogramaEventos = {
       horaFin: '12:15',
       titulo: 'Ponencia: Transformación Digital en la Enseñanza de Arquitectura',
       expositores: ['Arq. Dr. Especialista TIC'],
-      linkTransmision: 'https://meet.google.com/pzk-kmcj-rjk',
+      linkFacebook: 'https://www.facebook.com/FAADU.UMSA/',
       lugar: 'Auditorio Principal',
       enfoque: 'Reforma Curricular'
     },
@@ -166,7 +187,7 @@ export const cronogramaEventos: CronogramaEventos = {
       horaFin: '13:15',
       titulo: 'Sesión de Retroalimentación: Comentarios y Propuestas',
       expositores: ['Participantes'],
-      linkTransmision: 'https://meet.google.com/pzk-kmcj-rjk',
+      linkFacebook: 'https://www.facebook.com/FAADU.UMSA/',
       lugar: 'Auditorio Principal'
     }
   ],
@@ -177,7 +198,7 @@ export const cronogramaEventos: CronogramaEventos = {
       horaFin: '10:30',
       titulo: 'Urbanismo y Territorio: Planificación en el Siglo XXI',
       expositores: ['Arq. Especialista Urbanismo'],
-      linkTransmision: 'https://meet.google.com/pzk-kmcj-rjk',
+      linkFacebook: 'https://www.facebook.com/FAADU.UMSA/',
       lugar: 'Auditorio Principal',
       enfoque: 'Urbanismo y Territorio - Historia'
     },
@@ -187,7 +208,7 @@ export const cronogramaEventos: CronogramaEventos = {
       horaFin: '10:45',
       titulo: 'Receso',
       expositores: [],
-      linkTransmision: '',
+      linkFacebook: '',
       lugar: 'Hall Central'
     },
     {
@@ -196,7 +217,7 @@ export const cronogramaEventos: CronogramaEventos = {
       horaFin: '12:00',
       titulo: 'Historia de la Arquitectura Local: Patrimonio e Identidad',
       expositores: ['Arq. Historiador', 'Investigador Académico'],
-      linkTransmision: 'https://meet.google.com/pzk-kmcj-rjk',
+      linkFacebook: 'https://www.facebook.com/FAADU.UMSA/',
       lugar: 'Auditorio Principal',
       enfoque: 'Urbanismo y Territorio - Historia'
     },
@@ -206,7 +227,7 @@ export const cronogramaEventos: CronogramaEventos = {
       horaFin: '13:35',
       titulo: 'Visita Virtual: Casos de Estudio Locales',
       expositores: ['Arq. Guía', 'Especialista en Patrimonio'],
-      linkTransmision: 'https://meet.google.com/pzk-kmcj-rjk',
+      linkFacebook: 'https://www.facebook.com/FAADU.UMSA/',
       lugar: 'Virtual - Transmisión Especial'
     }
   ],
@@ -217,7 +238,7 @@ export const cronogramaEventos: CronogramaEventos = {
       horaFin: '10:30',
       titulo: 'Expresión y Representación: Herramientas Digitales Contemporáneas',
       expositores: ['Arq. Especialista Representación'],
-      linkTransmision: 'https://meet.google.com/pzk-kmcj-rjk',
+      linkFacebook: 'https://www.facebook.com/FAADU.UMSA/',
       lugar: 'Auditorio Principal',
       enfoque: 'Expresión, Representación, IA'
     },
@@ -227,7 +248,7 @@ export const cronogramaEventos: CronogramaEventos = {
       horaFin: '10:45',
       titulo: 'Receso',
       expositores: [],
-      linkTransmision: '',
+      linkFacebook: '',
       lugar: 'Hall Central'
     },
     {
@@ -236,7 +257,7 @@ export const cronogramaEventos: CronogramaEventos = {
       horaFin: '12:15',
       titulo: 'Inteligencia Artificial en Arquitectura: Aplicaciones y Futuro',
       expositores: ['Arq. Especialista IA', 'Investigador TIC'],
-      linkTransmision: 'https://meet.google.com/pzk-kmcj-rjk',
+      linkFacebook: 'https://www.facebook.com/FAADU.UMSA/',
       lugar: 'Auditorio Principal',
       enfoque: 'Expresión, Representación, IA'
     },
@@ -246,7 +267,7 @@ export const cronogramaEventos: CronogramaEventos = {
       horaFin: '13:30',
       titulo: 'Cierre y Reflexión Final',
       expositores: ['Coordinadores FAADU'],
-      linkTransmision: 'https://meet.google.com/pzk-kmcj-rjk',
+      linkFacebook: 'https://www.facebook.com/FAADU.UMSA/',
       lugar: 'Auditorio Principal'
     }
   ],
@@ -257,7 +278,7 @@ export const cronogramaEventos: CronogramaEventos = {
       horaFin: '10:30',
       titulo: 'Propuestas de Materias Curriculares Nuevas',
       expositores: ['Comisión Académica'],
-      linkTransmision: 'https://meet.google.com/pzk-kmcj-rjk',
+      linkFacebook: 'https://www.facebook.com/FAADU.UMSA/',
       lugar: 'Auditorio Principal',
       enfoque: 'Propuestas de Materias Curriculares'
     },
@@ -267,7 +288,7 @@ export const cronogramaEventos: CronogramaEventos = {
       horaFin: '10:45',
       titulo: 'Receso',
       expositores: [],
-      linkTransmision: '',
+      linkFacebook: '',
       lugar: 'Hall Central'
     },
     {
@@ -276,7 +297,7 @@ export const cronogramaEventos: CronogramaEventos = {
       horaFin: '12:00',
       titulo: 'Votación y Aprobación de Propuestas',
       expositores: ['Consejo Académico'],
-      linkTransmision: 'https://meet.google.com/pzk-kmcj-rjk',
+      linkFacebook: 'https://www.facebook.com/FAADU.UMSA/',
       lugar: 'Auditorio Principal',
       enfoque: 'Propuestas de Materias Curriculares'
     },
@@ -286,7 +307,7 @@ export const cronogramaEventos: CronogramaEventos = {
       horaFin: '13:00',
       titulo: 'Clausura Oficial del Evento',
       expositores: ['Autoridades UMSA', 'FAADU'],
-      linkTransmision: 'https://meet.google.com/pzk-kmcj-rjk',
+      linkFacebook: 'https://www.facebook.com/FAADU.UMSA/',
       lugar: 'Auditorio Principal'
     }
   ]
