@@ -15,7 +15,8 @@ export interface CronogramaEventos {
 }
 
 export const cronogramaEventos: CronogramaEventos = {
-  viernes03: [
+  viernes03: {
+    eventos: [
     {
       id: 'vier03-1',
       horaInicio: '14:00',
@@ -38,8 +39,10 @@ export const cronogramaEventos: CronogramaEventos = {
       enfoque: 'SESIÓN DE PRUEBAS EN TIEMPO REAL - FAADU',
       qrFacebook: 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://www.facebook.com/profile.php?id=100047802766633'
     }
-  ],
-  lunes: [
+  ]
+  },
+  lunes: {
+    eventos: [
     {
       id: 'lun-1',
       horaInicio: '10:30',
@@ -110,7 +113,15 @@ export const cronogramaEventos: CronogramaEventos = {
       enfoque: ''
     }
   ],
-  martes: [
+    coordinacion: {
+      moderador: 'Dr. Arq. Gonzalo Edgar Salazar Antequera',
+      secretarioActas: 'Ing. Franklin Cuevas',
+      coordinadorCRTP: 'Arq. Humberto Candia',
+      responsableAsistencia: 'Univ. Alexander Callisaya / Univ. Juan Rengel'
+    }
+  },
+  martes: {
+    eventos: [
     {
       id: 'mar-1',
       horaInicio: '09:00',
@@ -151,7 +162,15 @@ export const cronogramaEventos: CronogramaEventos = {
       enfoque: 'Taller - Proyecto'
     }
   ],
-  miercoles: [
+    coordinacion: {
+      moderador: 'Dr. Arq. Juan Carlos Aranibar del Alcazar',
+      secretarioActas: 'Arq. Zazanda Salcedo',
+      coordinadorCRTP: 'Arq. Paola Carvallo',
+      responsableAsistencia: 'Univ. Abryl Aliaga / Univ. Carla Quispe'
+    }
+  },
+  miercoles: {
+    eventos: [
     {
       id: 'mie-1',
       horaInicio: '09:00',
@@ -191,7 +210,15 @@ export const cronogramaEventos: CronogramaEventos = {
       lugar: 'Auditorio Principal'
     }
   ],
-  jueves: [
+    coordinacion: {
+      moderador: 'Univ. Gema Francy Ochoa Mollinedo',
+      secretarioActas: 'Arq. Hadeé Bascopé',
+      coordinadorCRTP: 'Arq. Manuel Ascarrunz',
+      responsableAsistencia: 'Univ. Diana Carrillo / Univ. Eral Lenz'
+    }
+  },
+  jueves: {
+    eventos: [
     {
       id: 'jue-1',
       horaInicio: '09:00',
@@ -231,7 +258,15 @@ export const cronogramaEventos: CronogramaEventos = {
       lugar: 'Virtual - Transmisión Especial'
     }
   ],
-  viernes: [
+    coordinacion: {
+      moderador: 'Univ. Adriana Rosello Avendaño',
+      secretarioActas: 'Arq. Ricardo Alfaro',
+      coordinadorCRTP: 'Arq. Silvia Bustos',
+      responsableAsistencia: 'Univ. Camila Encinas / Univ. Eyenil Rodriguez'
+    }
+  },
+  viernes: {
+    eventos: [
     {
       id: 'vie-1',
       horaInicio: '09:00',
@@ -271,7 +306,15 @@ export const cronogramaEventos: CronogramaEventos = {
       lugar: 'Auditorio Principal'
     }
   ],
-  lunes13: [
+    coordinacion: {
+      moderador: 'Ing. Cristhoffer Tito Aguila Gomez',
+      secretarioActas: 'Arq. Danilo Raznatovic',
+      coordinadorCRTP: 'Ing. Gloria Islas',
+      responsableAsistencia: 'Univ. Itaray Gutierrez / Univ. Fernanda Torres'
+    }
+  },
+  lunes13: {
+    eventos: [
     {
       id: 'lun13-1',
       horaInicio: '09:00',
@@ -311,6 +354,7 @@ export const cronogramaEventos: CronogramaEventos = {
       lugar: 'Auditorio Principal'
     }
   ]
+  }
 }
 
 // Convertir nombres de días a números ISO (0 = domingo, 1 = lunes, etc.)

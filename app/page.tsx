@@ -1,688 +1,1341 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Image from 'next/image'
 import { QRCodeSVG } from 'qrcode.react'
-import { Calendar, Clock } from 'lucide-react'
-import { cronogramaEventos, convertirHoraAMinutos } from '@/lib/cronograma'
-import type { Evento } from '@/lib/cronograma'
+import { Calendar, Clock, MapPin, X, Users, Award, Shield, CheckCircle, ArrowRight } from 'lucide-react'
 
-type EstadoEvento = 'en-vivo' | 'proximo' | 'pasado' | 'receso'
-
-interface EventoConEstado extends Evento {
-  estado: EstadoEvento
-}
-
-const DIAS_SEMANA = ['viernes03', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'lunes13'] as const
-const ETIQUETAS_DIAS = {
-  viernes03: 'Viernes 03',
-  lunes: 'Lunes 06',
-  martes: 'Martes 07',
-  miercoles: 'Miércoles 08',
-  jueves: 'Jueves 09',
-  viernes: 'Viernes 10',
-  lunes13: 'Lunes 13'
-}
-
-// Configuración de fechas en el calendario 2026 para cada pestaña del cronograma
-// Año: 2026, Mes: 6 (Julio en Javascript, 0-indexed)
-const MAPA_FECHAS_DIAS: Record<string, { year: number; month: number; date: number }> = {
-  viernes03: { year: 2026, month: 6, date: 3 },
-  lunes: { year: 2026, month: 6, date: 6 },
-  martes: { year: 2026, month: 6, date: 7 },
-  miercoles: { year: 2026, month: 6, date: 8 },
-  jueves: { year: 2026, month: 6, date: 9 },
-  viernes: { year: 2026, month: 6, date: 10 },
-  lunes13: { year: 2026, month: 6, date: 13 },
-}
-
-// Helper para saber si una clave de día corresponde al día de un objeto Date
-const esElDiaDeHoy = (diaKey: string, fecha: Date): boolean => {
-  const config = MAPA_FECHAS_DIAS[diaKey]
-  if (!config) return false
+// Icono personalizado de Facebook para evitar problemas de versión en lucide-react
+function FacebookIcon({ className }: { className?: string }) {
   return (
-    fecha.getFullYear() === config.year &&
-    fecha.getMonth() === config.month &&
-    fecha.getDate() === config.date
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em">
+      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+    </svg>
   )
 }
 
-// Helper para calcular el estado de una ponencia basado en la fecha del sistema actual
-const obtenerEstadoEvento = (
-  evento: Evento,
-  diaKey: string,
-  fecha: Date
-): EstadoEvento => {
-  const config = MAPA_FECHAS_DIAS[diaKey]
-  if (!config) return 'proximo'
+// Interfaces de Datos
+interface Evento {
+  id: string
+  horaInicio: string
+  horaFin: string
+  titulo: string
+  expositores: string[]
+  lugar: string
+  linkFacebook: string
+  enfoque?: string
+}
 
-  const fechaEvento = new Date(config.year, config.month, config.date, 0, 0, 0)
-  const fechaHoySinHora = new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate(), 0, 0, 0)
+interface Coordinacion {
+  moderador: string
+  secretarioActas: string
+  coordinadorCRTP: string
+  responsableAsistencia: string
+}
 
-  if (fechaHoySinHora.getTime() > fechaEvento.getTime()) {
-    return 'pasado'
-  } else if (fechaHoySinHora.getTime() < fechaEvento.getTime()) {
-    return 'proximo'
-  } else {
-    // Es el mismo día calendario
-    const minutosActuales = fecha.getHours() * 60 + fecha.getMinutes()
-    const inicio = convertirHoraAMinutos(evento.horaInicio)
-    const fin = convertirHoraAMinutos(evento.horaFin)
+interface DiaCronograma {
+  diaClave: string
+  etiqueta: string
+  enfoque: string
+  fecha: { year: number; month: number; date: number }
+  eventos: Evento[]
+  coordinacion: Coordinacion
+}
 
-    if (minutosActuales < inicio) {
-      return 'proximo'
-    } else if (minutosActuales >= fin) {
-      return 'pasado'
-    } else {
-      // Dentro del rango de tiempo
-      return evento.expositores.length === 0 ? 'receso' : 'en-vivo'
+// 1. Estructura de Datos e Inyección del Cronograma Oficial Completo
+const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
+  viernes03: {
+    diaClave: 'viernes03',
+    etiqueta: 'Viernes 03 de Julio',
+    enfoque: 'SESIÓN DE PRUEBAS EN TIEMPO REAL - FAADU',
+    fecha: { year: 2026, month: 6, date: 3 }, // Julio es 6 (0-indexed)
+    eventos: [
+      {
+        id: 'v03-reg',
+        horaInicio: '09:00',
+        horaFin: '09:30',
+        titulo: 'Inscripciones y registro',
+        expositores: [],
+        lugar: 'Previos del CRTP',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'v03-test1',
+        horaInicio: '14:00',
+        horaFin: '15:00',
+        titulo: 'Evento Prueba del RTP 1',
+        expositores: ['Personal del CRTP'],
+        lugar: 'Previos del CRTP',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/',
+        enfoque: 'Pruebas'
+      },
+      {
+        id: 'v03-test2',
+        horaInicio: '15:00',
+        horaFin: '16:00',
+        titulo: 'Evento Prueba del RTP 2',
+        expositores: ['Personal del CRTP'],
+        lugar: 'Previos del CRTP',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/',
+        enfoque: 'Pruebas'
+      },
+      {
+        id: 'v03-noc',
+        horaInicio: '20:00',
+        horaFin: '21:00',
+        titulo: 'Sesión de Prueba Nocturna',
+        expositores: ['Personal del CRTP'],
+        lugar: 'Previos del CRTP',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      }
+    ],
+    coordinacion: {
+      moderador: 'PERSONAL DEL CRTP',
+      secretarioActas: 'PERSONAL DEL CRTP',
+      coordinadorCRTP: 'PERSONAL DEL CRTP',
+      responsableAsistencia: 'PERSONAL DEL CRTP'
+    }
+  },
+  lunes: {
+    diaClave: 'lunes',
+    etiqueta: 'Lunes 06 de Julio',
+    enfoque: 'PERFIL - COMPETENCIAS',
+    fecha: { year: 2026, month: 6, date: 6 },
+    eventos: [
+      {
+        id: 'lun-reg',
+        horaInicio: '09:00',
+        horaFin: '09:30',
+        titulo: 'Inscripciones y registro',
+        expositores: [],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'lun-auth',
+        horaInicio: '09:30',
+        horaFin: '10:00',
+        titulo: 'Intervención de autoridades de la FAADU',
+        expositores: ['Autoridades FAADU'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'lun-acad',
+        horaInicio: '10:00',
+        horaFin: '10:30',
+        titulo: 'Comisión academica',
+        expositores: ['Comisión Académica'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'lun-1',
+        horaInicio: '10:30',
+        horaFin: '11:00',
+        titulo: 'Del Modelo Declarativo a la Operatividad Socioformativa: Propuesta del Perfil de Egreso y Profesional del Arquitecto FAADU-UMSA 2026 ante la Complejidad Territorial y Laboral del Siglo XXI',
+        expositores: ['Fabiola Zaballa', 'Paola Carvallo', 'Silvia Bustos', 'Humberto Candia', 'Manuel Ascarrunz', 'Jahdiel Villafuerte', 'Leonor Cuevas'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'lun-2',
+        horaInicio: '11:00',
+        horaFin: '11:30',
+        titulo: 'EL PERFIL PROFESIONAL DEL ARQUITECTO EN LA FAADU-UMSA: Una reflexión crítica desde las demandas contemporáneas de la disciplina y la sociedad.',
+        expositores: ['Arq. Ismael Carvajal Vogtschmidt'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'lun-3',
+        horaInicio: '11:30',
+        horaFin: '12:00',
+        titulo: 'PROPUESTA CONTEMPORÁNEA DE COMPETENCIAS PARA LA FORMACIÓN PROFESIONAL EN ARQUITECTURA A partir del documento Competencias Plan de Estudios 2008 y de referentes institucionales, globales y latinoamericanos',
+        expositores: ['MsC. Arq. Roberto Moreira Cordova'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'lun-4',
+        horaInicio: '12:00',
+        horaFin: '12:30',
+        titulo: 'PERFIL DE EGRESO Y PERFIL PROFESIONAL EN EL PROCESO DE REDISEÑO CURRICULAR DE LA CARRERA DE ARQUITECTURA',
+        expositores: ['MsC. Arq. Williams Terrazas'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'lun-5',
+        horaInicio: '12:30',
+        horaFin: '13:00',
+        titulo: 'LÍDER CULTURAL: HACIA UN NUEVO PERFIL DEL ARQUITECTO FAADU – UMSA',
+        expositores: ['Arq. Salomon Espejo Quispe'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'lun-6',
+        horaInicio: '13:00',
+        horaFin: '13:30',
+        titulo: 'OPORTUNIDADES LABORALES PARA ARQUITECTOS EN EL SECTOR PUBLICO BOLIVIANO',
+        expositores: ['Ezequiel Callisaya Sanchez', 'Alison Angeles Gutierrez Condori', 'Yerly Marupa Colque', 'Jhael Massiel Ramirez Aguilar'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'lun-deb',
+        horaInicio: '13:30',
+        horaFin: '14:00',
+        titulo: 'Conclusiones y debate',
+        expositores: [],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'lun-noc',
+        horaInicio: '20:00',
+        horaFin: '21:00',
+        titulo: 'Rediseño curricular en Artes Plasticas',
+        expositores: ['Docentes e Invitados FAADU'],
+        lugar: 'Exposicion virtual GOOGLE MEET - FACEBOOK LIVE',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      }
+    ],
+    coordinacion: {
+      moderador: 'DR. ARQ. GONZALO EDGAR SALAZAR ANTEQUERA',
+      secretarioActas: 'ING. FRANKLIN CUEVAS',
+      coordinadorCRTP: 'ARQ. HUMBERTO CANDIA',
+      responsableAsistencia: 'UNIV. ALEXANDER CALLISAYA / UNIV. JUAN RENGEL'
+    }
+  },
+  martes: {
+    diaClave: 'martes',
+    etiqueta: 'Martes 07 de Julio',
+    enfoque: 'TALLER - PROYECTO',
+    fecha: { year: 2026, month: 6, date: 7 },
+    eventos: [
+      {
+        id: 'mar-reg',
+        horaInicio: '09:00',
+        horaFin: '09:30',
+        titulo: 'Inscripciones y registro',
+        expositores: [],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'mar-7',
+        horaInicio: '09:30',
+        horaFin: '10:00',
+        titulo: 'PROPUESTA DE FORTALECIMIENTO DEL TALLER VERTICAL',
+        expositores: ['MsC. Arq. Roberto Moreira Cordova'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'mar-8',
+        horaInicio: '10:00',
+        horaFin: '10:30',
+        titulo: 'EQUIPAMIENTOS DEMANDADOS VS EQUIPAMIENTOS PROYECTADOS',
+        expositores: ['Derick Yura chuquimia', 'Evelin Maya Callisaya', 'Vargas Grover Eduardo Gutierrez Mamani', 'Melany Carolay Mendoza Gutierrez', 'Ruth Ramos Villa'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'mar-9',
+        horaInicio: '10:30',
+        horaFin: '11:00',
+        titulo: 'ESTRATEGIAS DE ARTICULACIÓN E INTEGRACIÓN ENTRE LAS ÁREAS DE CONOCIMIENTO DE TALLER DE PROYECTOS Y EDIFICACIONES',
+        expositores: ['Arq. Gustavo Arce Valdivia'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'mar-10',
+        horaInicio: '11:00',
+        horaFin: '11:30',
+        titulo: 'PROYECTO, PROYECTUALIDAD Y TALLER',
+        expositores: ['Arq. Guillermo Vladimir Muñoz Marquez'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'mar-11',
+        horaInicio: '11:30',
+        horaFin: '12:00',
+        titulo: 'PROPUESTA DE CREACIÓN DEL TALLER DE URBANISMO',
+        expositores: ['MsC. Arq. Roberto Moreira Cordova'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'mar-12',
+        horaInicio: '12:00',
+        horaFin: '12:30',
+        titulo: 'PROPUESTA PARA LA CREACIÓN DEL LABORATORIO DE TERRITORIO Y PROYECTO (LAB T-P) Mediante la investigación situada, la vinculación social y la praxis transformadora',
+        expositores: ['Arq. Gianni Renzo Borja Godoy'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'mar-13',
+        horaInicio: '12:30',
+        horaFin: '13:00',
+        titulo: 'REGLAMENTO DE EVALUACIÓN DOCENTE DE LA CARRERA DE ARQUITECTURA',
+        expositores: ['MsC. Arq. Roberto Moreira Cordova'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'mar-14',
+        horaInicio: '13:00',
+        horaFin: '13:30',
+        titulo: 'GESTOR DE PROYECTOS, INNOVACIÓN Y VINCULACIÓN',
+        expositores: ['MsC. Arq. David Antonio Vila Fonseca'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'mar-deb',
+        horaInicio: '13:30',
+        horaFin: '14:00',
+        titulo: 'Conclusiones y debate',
+        expositores: [],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'mar-noc',
+        horaInicio: '20:00',
+        horaFin: '21:00',
+        titulo: 'EL SISTEMA DE LAS PRÁCTICAS Hacia una nueva educación en Arquitectura. FAADU UMSA',
+        expositores: ['Comisión de Prácticas Académicas'],
+        lugar: 'Exposicion virtual GOOGLE MEET - FACEBOOK LIVE',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      }
+    ],
+    coordinacion: {
+      moderador: 'DR. ARQ. JUAN CARLOS ARANIBAR DEL ALCAZAR',
+      secretarioActas: 'ARQ. ZAZANDA SALCEDO',
+      coordinadorCRTP: 'ARQ. PAOLA CARVALLO',
+      responsableAsistencia: 'UNIV. ABRYL ALIAGA / UNIV. CARLA QUISPE'
+    }
+  },
+  miercoles: {
+    diaClave: 'miercoles',
+    etiqueta: 'Miércoles 08 de Julio',
+    enfoque: 'REFORMA CURRICULAR',
+    fecha: { year: 2026, month: 6, date: 8 },
+    eventos: [
+      {
+        id: 'mie-reg',
+        horaInicio: '09:00',
+        horaFin: '09:30',
+        titulo: 'Inscripciones y registro',
+        expositores: [],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'mie-15',
+        horaInicio: '09:30',
+        horaFin: '10:00',
+        titulo: 'REDISEÑO CURRICULAR : FORMANDO AL ARQUITECTO DEL FUTURO EN LA UMSA',
+        expositores: ['PhD. Ing. Carlos Fernandez Mariño'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'mie-16',
+        horaInicio: '10:00',
+        horaFin: '10:30',
+        titulo: 'Rediseño Curricular de la Carrera de Arquitectura FAADU–UMSA: Un Modelo Integrado de Formación por Competencias con Enfoque Territorial, Tecnológico e Investigativo',
+        expositores: ['Arq. Haydee Bascope Guzmán', 'Arq. Franklin Cuevas Moya', 'MSc. Arq. Zazanda Salcedo Gutierrez', 'Arq. Ricardo Alfaro', 'MSc. Arq. Danilo Raznatovic'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'mie-17',
+        horaInicio: '10:30',
+        horaFin: '11:00',
+        titulo: 'EL ARQUITECTO Y LOS DESAFÍOS EN PROYECTOS DE INVERSIÓN PÚBLICA CONSTRUYENDO EL PERFIL PROFESIONAL Y PERFIL DE EGRESO',
+        expositores: ['M.Sc. Ing. Gloria Isla Llanos'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'mie-18',
+        horaInicio: '11:00',
+        horaFin: '11:30',
+        titulo: 'PROPUESTA DE OPTIMIZACIÓN EN EL ACCESO AL POSTGRADO DESDE EL GRADO EN LA CARRERA DE ARQUITECTURA FAADU-UMSA MODELO APLICADO A LA Maestría en Patrimonio Cultural (Su aplicación puede ampliarse a otras Maestrías)',
+        expositores: ['Arq. M.Sc. Luis Raul C. Prado Rios'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'mie-19',
+        horaInicio: '11:30',
+        horaFin: '12:00',
+        titulo: 'EL PLANO DEL PROFESIONAL CONTEMPORANEO Diseñando competencias transversales para sobrevivir a la obsolescencia técnica',
+        expositores: ['M.Sc. Arq. Heidi Mendoza Barrau'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'mie-20',
+        horaInicio: '12:00',
+        horaFin: '12:30',
+        titulo: 'PROPUESTA RECTORA DE LA REFORMA CURRICULAR Ejes estrategicos',
+        expositores: ['MsC. Arq. Roberto Moreira Cordova'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'mie-21',
+        horaInicio: '12:30',
+        horaFin: '13:00',
+        titulo: 'EPISTEMOLOGÍA DEL HÁBITAT Y LA INNOVACIÓN CURRICULAR: HACIA UN PERFIL PROFESIONAL DE LA ARQUITECTURA EN BOLIVIA 2027',
+        expositores: ['Univ. Orlando Baltazar Quispe Roman'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'mie-22',
+        horaInicio: '13:00',
+        horaFin: '13:30',
+        titulo: 'DEL GESTO AL CRITERIO: FORMACIÓN ACADEMICA Y CONSTRUCCION DEL JUICIO ARQUITECTONICO EN LA ENSEÑANZA DEL PROYECTO',
+        expositores: ['Univ. Juan Sebastian Garcia Fuentes'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'mie-deb',
+        horaInicio: '13:30',
+        horaFin: '14:00',
+        titulo: 'Conclusiones y debate',
+        expositores: [],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'mie-noc',
+        horaInicio: '20:00',
+        horaFin: '21:00',
+        titulo: 'Curricula flexible y la maestria terminal',
+        expositores: ['Comisión de Postgrado FAADU'],
+        lugar: 'Exposicion virtual GOOGLE MEET - FACEBOOK LIVE',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      }
+    ],
+    coordinacion: {
+      moderador: 'UNIV. GEMA FRANCY OCHOA MOLLINEDO',
+      secretarioActas: 'ARQ. HADEÉ BASCOPÉ',
+      coordinadorCRTP: 'ARQ. MANUEL ASCARRUNZ',
+      responsableAsistencia: 'UNIV. DIANA CARRILLO / UNIV. ERAL LENZ'
+    }
+  },
+  jueves: {
+    diaClave: 'jueves',
+    etiqueta: 'Jueves 09 de Julio',
+    enfoque: 'URBANISMO Y TERRITORIO - HISTORIA',
+    fecha: { year: 2026, month: 6, date: 9 },
+    eventos: [
+      {
+        id: 'jue-reg',
+        horaInicio: '09:00',
+        horaFin: '09:30',
+        titulo: 'Inscripciones y registro',
+        expositores: [],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'jue-23',
+        horaInicio: '09:30',
+        horaFin: '10:00',
+        titulo: 'PROYECTOS URBANOS ESTRATÉGICOS PARA LA TRANSFORMACIÓN TERRITORIAL DE LA PAZ 2026–2031: HACIA UN MODELO DE CIUDAD RESILIENTE, POLICÉNTRICA Y SOSTENIBLE',
+        expositores: ['Univ. Suseth Camila Mejía Arroyo', 'Univ. José Manuel Peralta Villanueva', 'Docente: Mg Sc.Arq. José María L. Vargas Aliaga'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'jue-24',
+        horaInicio: '10:00',
+        horaFin: '10:30',
+        titulo: '¿Qué problemas estamos enseñando a resolver? Análisis territorial de los proyectos de grado de Arquitectura UMSA (2020-2024) como insumo para el rediseño curricular',
+        expositores: ['Calle Nina, Maribel Lizeth', 'Castro Pinedo, Adriana', 'Iriarte Valles, Franklin Rolando', 'Huanca Poma, Evelin', 'Manrique Sanjines, Maria Fernanda', 'Ocaña Flores, Alessandro Daniel', 'Quino Aduviri, Sheyla Mariel', 'MSc. Arq. Ximena Cecilia León Villarroel'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'jue-25',
+        horaInicio: '10:30',
+        horaFin: '11:00',
+        titulo: 'CREACIÓN DE LA CARRERA DE URBANISMO Y AREA METROPOLITANA COMO RESPUESTA AL PROCESO DE CAMBIO DE CURRICULA ACADEMICA FAADU',
+        expositores: ['PhD. Arq. Jorge Sainz Cardona'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'jue-26',
+        horaInicio: '11:00',
+        horaFin: '11:30',
+        titulo: 'ÁREAS DISCIPLINARES DEMANDADAS VS. ÁREAS DISCIPLINARES DESARROLLADAS',
+        expositores: ['Perales Quisbert Keyti Yanine', 'Limachi Choque Eidan Josué', 'Cuentas Encinas Santiago'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'jue-27',
+        horaInicio: '11:30',
+        horaFin: '12:00',
+        titulo: 'INTERACCIÓN SOCIAL Y EXTENSIÓN UNIVERSITARIA EN LA CARRERA DE ARQUITECTURA FAADU – UMSA Propuesta para el Rediseño Curricular por Competencias 2027: Fundamentos históricos, contexto comparado y modelo operativo',
+        expositores: ['Univ. Orlando Baltazar Quispe Román'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'jue-28',
+        horaInicio: '12:00',
+        horaFin: '12:30',
+        titulo: 'Ecologías de aprendizaje e interdependencia: una propuesta para el rediseño curricular de arquitectura',
+        expositores: ['MsC. Arq. Vania Susana Calle Quispe'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'jue-29',
+        horaInicio: '12:30',
+        horaFin: '13:00',
+        titulo: 'Desconexión entre formación académica y demanda estatal de infraestructura en Bolivia',
+        expositores: ['Avril Mayli Castro Castillo', 'Naira Estefani Mita Pajsi', 'Max Antony Tarqui Apaza'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'jue-30',
+        horaInicio: '13:00',
+        horaFin: '13:30',
+        titulo: 'Historia como generador de pensamiento crítico Postura Académica para el Sub Ámbito de Historia',
+        expositores: ['Bascopé Haydeé', 'Calsina Rosario', 'Candia Humberto', 'Carvallo Paola', 'Escalante Javier', 'Espinoza Walter', 'Mendoza Heidi', 'Prado Luis'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'jue-deb',
+        horaInicio: '13:30',
+        horaFin: '14:00',
+        titulo: 'Conclusiones y debate',
+        expositores: [],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'jue-noc',
+        horaInicio: '20:00',
+        horaFin: '21:00',
+        titulo: 'Inteligencia artificial aplicada a la carrera de arquitectura',
+        expositores: ['Especialistas en Tecnología y Diseño Computacional'],
+        lugar: 'Exposicion virtual GOOGLE MEET - FACEBOOK LIVE',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      }
+    ],
+    coordinacion: {
+      moderador: 'UNIV. ADRIANA ROSELLO AVENDAÑO',
+      secretarioActas: 'ARQ. RICARDO ALFARO',
+      coordinadorCRTP: 'ARQ. SILVIA BUSTOS',
+      responsableAsistencia: 'UNIV. CAMILA ENCINAS / UNIV. EYENIL RODRIGUEZ'
+    }
+  },
+  viernes: {
+    diaClave: 'viernes',
+    etiqueta: 'Viernes 10 de Julio',
+    enfoque: 'EXPRESION REPRESENTACION AI - HERRAMIENTAS DIGITALES - INVESTIGACIÓN',
+    fecha: { year: 2026, month: 6, date: 10 },
+    eventos: [
+      {
+        id: 'vie-reg',
+        horaInicio: '09:00',
+        horaFin: '09:30',
+        titulo: 'Inscripciones y registro',
+        expositores: [],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'vie-31',
+        horaInicio: '09:30',
+        horaFin: '10:00',
+        titulo: 'La Filosofía en la Enseñanza de la Arquitectura: Heidegger, Foucault y el Pensamiento Crítico del Espacio',
+        expositores: ['Arq. Jorge E. Bolaños Medrano'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'vie-32',
+        horaInicio: '10:00',
+        horaFin: '10:30',
+        titulo: 'LA REPRESENTACIÓN Y EXPRESIÓN GRÁFICA COMO BASE DEL DESARROLLO DE COMPETENCIAS EN EL NUEVO CURRÍCULO DE ARQUITECTURA',
+        expositores: ['MSc. Arq. Esdenka Araoz Acosta'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'vie-33',
+        horaInicio: '10:30',
+        horaFin: '11:00',
+        titulo: 'PROPUESTA DE LA IMPLEMENTACIÓN DE LA METODOLOGIA BIM EN EL CURRICULO DE LA CARRERA DE ARQUITECTURA FAADU',
+        expositores: ['MsC. Arq. Roberto Moreira Cordova'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'vie-34',
+        horaInicio: '11:00',
+        horaFin: '11:30',
+        titulo: 'Propuesta de incorporación de una Malla Curricular BIM en la Carrera de Arquitectura FAADU-UMSA como estrategia de innovación curricular, transformación digital y fortalecimiento del perfil profesional',
+        expositores: ['Ing. Ramiro Mauricio Chaira Delgado'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'vie-35',
+        horaInicio: '11:30',
+        horaFin: '12:00',
+        titulo: 'Una mirada hacia la investigación',
+        expositores: ['Arq. M.Sc. Belen Alvarado Mollinedo'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'vie-36',
+        horaInicio: '12:00',
+        horaFin: '12:30',
+        titulo: 'La investigación como eje transversal del rediseño curricular: De la asignatura aislada al sistema de investigación formativa',
+        expositores: ['M.Sc. Ing. Luz Mariela Choque Ayllón'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'vie-37',
+        horaInicio: '12:30',
+        horaFin: '13:00',
+        titulo: 'Propuesta de programa por competencias Metodología de la Investigación Arquitectónica y Proyectual Carrera de Arquitectura - FAADU - Universidad Mayor de San Andrés',
+        expositores: ['MsC. Arq. Roberto Moreira Cordova'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'vie-38',
+        horaInicio: '13:00',
+        horaFin: '13:30',
+        titulo: 'INSTALACIONES ESPECIALES Y TECNOLOGIAS DE INNOVACIÓN',
+        expositores: ['Ing. Ruben Juan Rocha Aguilar'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'vie-deb',
+        horaInicio: '13:30',
+        horaFin: '14:00',
+        titulo: 'Conclusiones y debate',
+        expositores: [],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'vie-noc',
+        horaInicio: '20:00',
+        horaFin: '21:00',
+        titulo: 'RE ensamblar la teoria de la forma',
+        expositores: ['Cátedras de Teoría y Morfología'],
+        lugar: 'Exposicion virtual GOOGLE MEET - FACEBOOK LIVE',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      }
+    ],
+    coordinacion: {
+      moderador: 'ING. CRISTHOFFER TITO AGUILA GOMEZ',
+      secretarioActas: 'ARQ. DANILO RAZNATOVIC',
+      coordinadorCRTP: 'ING. GLORIA ISLAS',
+      responsableAsistencia: 'UNIV. ITARAY GUTIERREZ / UNIV. FERNANDA TORRES'
+    }
+  },
+  lunes13: {
+    diaClave: 'lunes13',
+    etiqueta: 'Lunes 13 de Julio',
+    enfoque: 'PROPUESTAS DE MATERIAS CURRICULARES',
+    fecha: { year: 2026, month: 6, date: 13 },
+    eventos: [
+      {
+        id: 'lun13-reg',
+        horaInicio: '09:00',
+        horaFin: '09:30',
+        titulo: 'Inscripciones y registro',
+        expositores: [],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'lun13-39',
+        horaInicio: '09:30',
+        horaFin: '10:00',
+        titulo: 'Hacia un arquitecto con competencias legales y éticas: Propuesta de incorporación de legislación y práctica profesional como materia transdisciplinar en la Carrera de Arquitectura de la UMSA',
+        expositores: ['M.Sc. Ing. Luz Mariela Choque Ayllón'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'lun13-40',
+        horaInicio: '10:00',
+        horaFin: '10:30',
+        titulo: 'PRESENTACIÓN DE PROPUESTA DE DISEÑO MICRO CURRICULAR DE LA MATERIA: ANALISÍS ESTRÚCTURAL 1 ED-303',
+        expositores: ['MSc. Ing. Nicanor Polo Cruz'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'lun13-41',
+        horaInicio: '10:30',
+        horaFin: '11:00',
+        titulo: 'PROPUESTA ACTUALIZADA DE PROGRAMA POR COMPETENCIAS, ASIGNATURA RAZONAMIENTO MATEMATICO',
+        expositores: ['MsC. Arq. Roberto Moreira Cordova'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'lun13-42',
+        horaInicio: '11:00',
+        horaFin: '11:30',
+        titulo: 'PROPUESTA DE INCORPORACIÓN DE ASIGNATURA "PREPARACIÓN Y GESTIÓN DE PROYECTOS" Al regimen regular obligatorio de la malla regular de arquitectura',
+        expositores: ['Mg. Victor Rolando Cansaya Cuchani'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'lun13-43',
+        horaInicio: '11:30',
+        horaFin: '12:00',
+        titulo: 'Propuesta de actualización de LA ENSEÑANZA DE LA MATEMÁTICA EN LA FORMACIÓN DE ARQUITECTOS',
+        expositores: ['Arq. Jorge Alfredo de la Rocha Justiniano'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'lun13-44',
+        horaInicio: '12:00',
+        horaFin: '12:30',
+        titulo: 'PROPUESTA PARA QUE LA MATERIA DE PATRIMONIO CULTURAL Y NATURAL SE CONSTITUYA EN MATERIA REGULAR OBLIGATORIA DE LA CARRERA DE ARQUITECTURA DE LA FAADU- UMSA',
+        expositores: ['Arq. M.Sc. Luis Raul C. Prado Rios'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'lun13-45',
+        horaInicio: '12:30',
+        horaFin: '13:00',
+        titulo: 'Asignatura Probabilidad y estadistica',
+        expositores: ['PhD. Efrain Santalla Alejo'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'lun13-46',
+        horaInicio: '13:00',
+        horaFin: '13:30',
+        titulo: 'El sistema de admisión como filtro hidráulico: propuesta de rediseño para la calidad académica y la reducción del estrés en la FAADU-UMSA',
+        expositores: ['Univ. Chura Mamani Daniel'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'lun13-tit',
+        horaInicio: '13:30',
+        horaFin: '14:00',
+        titulo: 'PROPUESTA DE PRIORIZACIÓN E INCENTIVACIÓN EN LA TITULACIÓN MEDIANTE TESIS y PROYECTOS DE GRADO DE MANERA INTERDISCIPLINAR y TRANSDISCIPLINAR.',
+        expositores: ['Arq. M.Sc. Luis Raul C. Prado Rios'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'lun13-deb',
+        horaInicio: '14:00',
+        horaFin: '14:30',
+        titulo: 'Conclusiones y debate',
+        expositores: [],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      },
+      {
+        id: 'lun13-cie',
+        horaInicio: '14:30',
+        horaFin: '15:00',
+        titulo: 'Cierre / refrigerio',
+        expositores: [],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+      }
+    ],
+    coordinacion: {
+      moderador: 'M.SC. ARQ. LUIS RAUL C. PRADO RIOS',
+      secretarioActas: 'MSC. ARQ. ZAZANDA SALCEDO GUTIERREZ',
+      coordinadorCRTP: 'ARQ. HUMBERTO CANDIA',
+      responsableAsistencia: 'UNIV. ALEXANDER CALLISAYA / UNIV. JUAN RENGEL'
     }
   }
 }
 
-// Helper para formatear la fecha actual de forma amigable en la UI
-const formatearFechaBella = (date: Date): string => {
-  const opciones: Intl.DateTimeFormatOptions = {
-    weekday: 'long',
-    day: '2-digit',
-    month: 'long',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false
-  }
-  return date.toLocaleDateString('es-ES', opciones)
+// Convertir hora "HH:MM" a minutos de día
+const convertirHoraAMinutos = (hora: string): number => {
+  const [h, m] = hora.split(':').map(Number)
+  return h * 60 + m
 }
 
-// Helper para obtener la fecha de forma dinámica en formato "[Día] [DD/MM/AAAA]"
-const obtenerFechaFormateada = (diaKey: string): string => {
-  const config = MAPA_FECHAS_DIAS[diaKey]
-  if (!config) return ''
-  const etiqueta = ETIQUETAS_DIAS[diaKey as keyof typeof ETIQUETAS_DIAS] || ''
-  const diaNombre = etiqueta.split(' ')[0]
-  const diaNum = String(config.date).padStart(2, '0')
-  const mesNum = String(config.month + 1).padStart(2, '0')
-  const añoNum = config.year
-  return `${diaNombre} ${diaNum}/${mesNum}/${añoNum}`
-}
-
-interface ModalAlertConfig {
-  tipo: 'inicio' | 'cambio'
-  titulo: string
-  tituloAnterior?: string
-  linkFacebook: string
-  id: string
-  nombrePonencia: string
-  expositores?: string[]
-  lugar?: string
-  horaInicio?: string
-  horaFin?: string
-  fechaFormateada: string
+// Saber si hoy calendario coincide con la clave
+const esElDiaDeHoy = (dia: DiaCronograma, fecha: Date): boolean => {
+  return (
+    fecha.getFullYear() === dia.fecha.year &&
+    fecha.getMonth() === dia.fecha.month &&
+    fecha.getDate() === dia.fecha.date
+  )
 }
 
 export default function Page() {
-  const [diaActual, setDiaActual] = useState<typeof DIAS_SEMANA[number]>('viernes03')
+  const [diaActual, setDiaActual] = useState<string>('viernes03')
   const [fechaSistema, setFechaSistema] = useState<Date | null>(null)
-  const [eventosConEstado, setEventosConEstado] = useState<EventoConEstado[]>([])
+  const [hasInitialLoaded, setHasInitialLoaded] = useState(false)
 
-  // Estados del Modal y del QR Expandido
-  const [modalConfig, setModalConfig] = useState<ModalAlertConfig | null>(null)
+  // Modales y Lightboxes
+  const [modalConfig, setModalConfig] = useState<Evento | null>(null)
   const [activePonenciaId, setActivePonenciaId] = useState<string | null>(null)
+  const [lastAlertedEventId, setLastAlertedEventId] = useState<string | null>(null)
   const [qrAmpliado, setQrAmpliado] = useState<string | null>(null)
 
-  // Timer en tiempo real con la hora nativa del dispositivo
+  // Imagenes robustas fallbacks state
+  const [logoUmsaSrc, setLogoUmsaSrc] = useState('/logo-umsa.png')
+  const [logoFaaduSrc, setLogoFaaduSrc] = useState('/images-removebg-preview.png')
+  const [logoCrtpSrc, setLogoCrtpSrc] = useState('/logo-crtp.png')
+
+  // Tick del reloj en tiempo real
   useEffect(() => {
     setFechaSistema(new Date())
-
-    const intervalo = setInterval(() => {
+    const interval = setInterval(() => {
       setFechaSistema(new Date())
-    }, 1000) // Actualización al segundo para respuestas dinámicas inmediatas
-
-    return () => clearInterval(intervalo)
+    }, 1000)
+    return () => clearInterval(interval)
   }, [])
 
-  // 1. Selección Inicial Automática de la Pestaña al cargar y sincronización
+  // Sincronización automática de día al cargar (Ocurre sólo una vez)
   useEffect(() => {
-    if (!fechaSistema) return
+    if (!fechaSistema || hasInitialLoaded) return
 
-    const hoy = DIAS_SEMANA.find((d) => esElDiaDeHoy(d, fechaSistema))
-    if (hoy) {
-      setDiaActual(hoy)
+    const hoyClave = Object.values(CRONOGRAMA_OFICIAL).find((dia) => esElDiaDeHoy(dia, fechaSistema))
+    if (hoyClave) {
+      setDiaActual(hoyClave.diaClave)
     } else {
-      // Fallback a viernes03 si hoy está fuera del rango del cronograma
-      setDiaActual('viernes03')
+      setDiaActual('viernes03') // Fallback al día de demostración
     }
-  }, [fechaSistema])
+    setHasInitialLoaded(true)
+  }, [fechaSistema, hasInitialLoaded])
 
-  // 2. Cálculo estricto del estado de las ponencias en base al calendario real
+  // Lógica de alerta modal "En vivo" automática
+  // Ocurre sólo cuando la hora del reloj del sistema cambia de rango de un bloque en el día actual del evento
   useEffect(() => {
     if (!fechaSistema) return
 
-    const eventosDelDia = cronogramaEventos[diaActual] || []
-    const eventosActualizados = eventosDelDia.map((evento) => {
-      const estado = obtenerEstadoEvento(evento, diaActual, fechaSistema)
-      return { ...evento, estado } as EventoConEstado
+    // Buscar si hoy calendario es el día de hoy
+    const diaDeHoy = Object.values(CRONOGRAMA_OFICIAL).find((d) => esElDiaDeHoy(d, fechaSistema))
+    if (!diaDeHoy) return
+
+    const minutosActuales = fechaSistema.getHours() * 60 + fechaSistema.getMinutes()
+    const ponenciaEnCurso = diaDeHoy.eventos.find((e) => {
+      // Filtrar recesos / inscripciones sin expositores
+      if (e.expositores.length === 0) return false
+      const inicio = convertirHoraAMinutos(e.horaInicio)
+      const fin = convertirHoraAMinutos(e.horaFin)
+      return minutosActuales >= inicio && minutosActuales < fin
     })
 
-    setEventosConEstado(eventosActualizados)
-  }, [diaActual, fechaSistema])
-
-  // 3. Monitorear ponencias "En Vivo" del día real para disparar el modal automáticamente
-  useEffect(() => {
-    if (!fechaSistema) return
-
-    // Buscar qué día corresponde a hoy en el calendario
-    const diaHoy = DIAS_SEMANA.find((d) => esElDiaDeHoy(d, fechaSistema))
-    if (!diaHoy) {
+    if (ponenciaEnCurso) {
+      if (ponenciaEnCurso.id !== activePonenciaId) {
+        setActivePonenciaId(ponenciaEnCurso.id)
+        // Disparar modal si el usuario está visualizando este día y no se ha alertado ya para este id
+        if (diaActual === diaDeHoy.diaClave && ponenciaEnCurso.id !== lastAlertedEventId) {
+          setModalConfig(ponenciaEnCurso)
+          setLastAlertedEventId(ponenciaEnCurso.id)
+        }
+      }
+    } else {
       setActivePonenciaId(null)
-      setModalConfig(null)
-      return
     }
+  }, [fechaSistema, diaActual, activePonenciaId, lastAlertedEventId])
 
-    const eventosHoy = cronogramaEventos[diaHoy] || []
-    const minutosActuales = fechaSistema.getHours() * 60 + fechaSistema.getMinutes()
+  // Helpers para obtener estado de una ponencia
+  const obtenerEstadoPonencia = (evento: Evento, dia: DiaCronograma): 'en-vivo' | 'proximo' | 'pasado' => {
+    if (!fechaSistema) return 'proximo'
 
-    // Buscar si hay una ponencia activa en este momento
-    const ponenciaEnVivo = eventosHoy.find((evento) => {
+    const fechaHoySinHora = new Date(fechaSistema.getFullYear(), fechaSistema.getMonth(), fechaSistema.getDate())
+    const fechaEvSinHora = new Date(dia.fecha.year, dia.fecha.month, dia.fecha.date)
+
+    if (fechaHoySinHora.getTime() > fechaEvSinHora.getTime()) {
+      return 'pasado'
+    } else if (fechaHoySinHora.getTime() < fechaEvSinHora.getTime()) {
+      return 'proximo'
+    } else {
+      // Mismo día
+      const minutosActuales = fechaSistema.getHours() * 60 + fechaSistema.getMinutes()
       const inicio = convertirHoraAMinutos(evento.horaInicio)
       const fin = convertirHoraAMinutos(evento.horaFin)
-      return minutosActuales >= inicio && minutosActuales < fin && evento.expositores.length > 0
-    })
 
-    const nuevoId = ponenciaEnVivo ? ponenciaEnVivo.id : null
-
-    if (nuevoId !== activePonenciaId) {
-      if (ponenciaEnVivo) {
-        const fechaFormateada = obtenerFechaFormateada(diaHoy)
-        if (activePonenciaId === null) {
-          // A. Inicio de una nueva ponencia desde estado sin ponencia activa
-          setModalConfig({
-            tipo: 'inicio',
-            titulo: '¡El evento está comenzando!',
-            linkFacebook: ponenciaEnVivo.linkFacebook || 'https://www.facebook.com/profile.php?id=100047802766633',
-            id: ponenciaEnVivo.id,
-            nombrePonencia: ponenciaEnVivo.titulo,
-            expositores: ponenciaEnVivo.expositores,
-            lugar: ponenciaEnVivo.lugar,
-            horaInicio: ponenciaEnVivo.horaInicio,
-            horaFin: ponenciaEnVivo.horaFin,
-            fechaFormateada: fechaFormateada
-          })
-        } else {
-          // B. Cambio de bloque: finalizó una y empezó inmediatamente la siguiente
-          const ponenciaAnterior = Object.values(cronogramaEventos)
-            .flat()
-            .find((e) => e.id === activePonenciaId)
-
-          setModalConfig({
-            tipo: 'cambio',
-            titulo: 'La ponencia anterior ha finalizado. Ha comenzado:',
-            tituloAnterior: ponenciaAnterior?.titulo,
-            linkFacebook: ponenciaEnVivo.linkFacebook || 'https://www.facebook.com/profile.php?id=100047802766633',
-            id: ponenciaEnVivo.id,
-            nombrePonencia: ponenciaEnVivo.titulo,
-            expositores: ponenciaEnVivo.expositores,
-            lugar: ponenciaEnVivo.lugar,
-            horaInicio: ponenciaEnVivo.horaInicio,
-            horaFin: ponenciaEnVivo.horaFin,
-            fechaFormateada: fechaFormateada
-          })
-        }
+      if (minutosActuales < inicio) {
+        return 'proximo'
+      } else if (minutosActuales >= fin) {
+        return 'pasado'
       } else {
-        // C. Expiración de ponencia sin relevo directo (receso o fin de la jornada)
-        setModalConfig(null)
+        return 'en-vivo'
       }
-      setActivePonenciaId(nuevoId)
     }
-  }, [fechaSistema, activePonenciaId])
+  }
 
-  const tieneEnVivo = eventosConEstado.some((e) => e.estado === 'en-vivo')
+  const diaSeleccionadoObj = CRONOGRAMA_OFICIAL[diaActual]
 
   return (
-    <main className="min-h-screen bg-white flex flex-col justify-between">
-      {/* Estilos locales para animación de modales */}
-      <style jsx global>{`
-        @keyframes modalScaleUp {
-          from {
-            opacity: 0;
-            transform: scale(0.95) translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-          }
-        }
-        .animate-modal-pop {
-          animation: modalScaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-      `}</style>
-
-      <div>
-        {/* Header Institucional de Tres Columnas */}
-        <header className="border-b-2 border-gray-200 bg-white py-6 px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-6xl">
-            <div className="grid grid-cols-1 md:grid-cols-[auto_1fr_auto] gap-6 items-center">
-              {/* Columna Izquierda: Escudo UMSA */}
-              <div className="flex justify-center md:justify-start shrink-0">
-                <img
-                  src="/Logo_Umsa.png"
-                  alt="Logo UMSA"
-                  className="h-24 object-contain"
-                />
-              </div>
-
-              {/* Columna Central: Texto Centrado */}
-              <div className="text-center flex flex-col justify-center space-y-1 md:px-4">
-                <span className="text-xs tracking-wider text-gray-500 font-semibold uppercase">
-                  Universidad Mayor de San Andrés
-                </span>
-                <span className="text-xs tracking-wider text-gray-500 font-semibold uppercase">
-                  Facultad de Arquitectura, Artes, Diseño y Urbanismo
-                </span>
-                <h1 className="text-xl sm:text-2xl font-extrabold text-neutral-900 leading-tight">
-                  Jornadas de Rediseño de la Malla Curricular de la Carrera de Arquitectura
-                </h1>
-                <p className="text-sm text-orange-600 font-medium italic">
-                  Hacia la nueva Curricula de la Carrera de Arquitectura por Competencias
-                </p>
-                {fechaSistema && (
-                  <div className="text-xs text-gray-400 mt-1">
-                    Hoy: <span className="font-semibold text-gray-700 capitalize">{formatearFechaBella(fechaSistema)}</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Columna Derecha: Isotipo FAADU */}
-              <div className="flex justify-center md:justify-end shrink-0">
-                <img
-                  src="/faadu-logo.png"
-                  alt="faadu-logo"
-                  className="h-24 object-contain"
-                />
-              </div>
-            </div>
+    <main className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-800">
+      {/* Header Institucional de Tres Columnas */}
+      <header className="bg-white border-b border-slate-200 py-6 px-4 md:px-8 shadow-sm">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-[200px_1fr_200px] gap-6 items-center">
+          {/* Columna Izquierda: Escudo UMSA */}
+          <div className="flex justify-center md:justify-start">
+            <img
+              src={logoUmsaSrc}
+              alt="Logo UMSA"
+              className="h-24 object-contain transition-all duration-300 hover:scale-105"
+              onError={() => setLogoUmsaSrc('/Logo_Umsa.png')}
+            />
           </div>
-        </header>
 
-        {/* Bloques de la APP (Sección Central del Cronograma) */}
-        <section className="bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-6xl">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900 lg:text-3xl">
-                  Cronograma del Evento
-                </h2>
-                <p className="text-gray-600 text-xs md:text-sm">
-                  Selecciona un día para ver los bloques de ponencias programados
-                </p>
-              </div>
-
-              {/* Badge EN VIVO global */}
-              {tieneEnVivo && (
-                <div className="flex items-center gap-3 rounded-lg px-5 py-2.5 animate-pulse bg-orange-600 max-w-fit">
-                  <span className="inline-block h-2.5 w-2.5 rounded-full bg-white"></span>
-                  <span className="font-bold text-white text-xs sm:text-sm">EN VIVO AHORA</span>
-                </div>
-              )}
-            </div>
-
-            {/* Tabs de días */}
-            <div className="mb-8 flex flex-wrap gap-2 lg:gap-3">
-              {DIAS_SEMANA.map((dia) => (
-                <button
-                  key={dia}
-                  onClick={() => {
-                    setDiaActual(dia)
-                    setModalConfig(null)
-                  }}
-                  className={`rounded-lg px-4 py-2 text-xs sm:text-sm font-semibold transition-all duration-200 lg:px-6 lg:py-3 cursor-pointer ${diaActual === dia
-                    ? 'text-white shadow-md'
-                    : 'border border-gray-300 bg-white text-gray-700 hover:border-orange-300 hover:text-orange-600'
-                    }`}
-                  style={
-                    diaActual === dia
-                      ? { backgroundColor: '#E5820C' }
-                      : {}
-                  }
-                >
-                  {ETIQUETAS_DIAS[dia]}
-                </button>
-              ))}
-            </div>
-
-            {/* Eventos del día */}
-            <div className="space-y-3">
-              {eventosConEstado.length > 0 ? (
-                eventosConEstado.map((evento) => (
-                  <EventoCard
-                    key={evento.id}
-                    evento={evento}
-                    onQrClick={setQrAmpliado}
-                  />
-                ))
-              ) : (
-                <div className="rounded-lg border-2 border-dashed border-gray-300 bg-white p-8 text-center">
-                  <p className="text-gray-500">No hay eventos programados para este día.</p>
-                </div>
-              )}
-            </div>
-          </div>
-        </section>
-      </div>
-
-      {/* Ventana Modal Emergente de Alerta de Transmisión */}
-      {modalConfig && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
-          <div className="w-full max-w-md animate-modal-pop rounded-xl border border-gray-100 bg-white p-6 shadow-2xl">
-            <div className="flex flex-col gap-4">
-              {/* Header */}
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="inline-block h-2.5 w-2.5 animate-pulse rounded-full bg-red-500"></span>
-                  <span className="text-xs font-bold uppercase tracking-wider text-orange-600">
-                    Alerta de Transmisión
+          {/* Columna Central: Texto Centrado */}
+          <div className="text-center space-y-1">
+            <span className="block text-xs font-bold text-slate-400 tracking-widest uppercase">
+              Universidad Mayor de San Andrés
+            </span>
+            <span className="block text-xs font-semibold text-slate-500 tracking-wider uppercase">
+              Facultad de Arquitectura, Artes, Diseño y Urbanismo
+            </span>
+            <h1 className="text-xl md:text-2xl font-extrabold text-slate-900 leading-tight">
+              Jornadas de Rediseño de la Malla Curricular de la Carrera de Arquitectura
+            </h1>
+            <p className="text-sm text-amber-600 font-medium italic mt-1">
+              Hacia la nueva Currícula de la Carrera de Arquitectura por Competencias
+            </p>
+            {fechaSistema && (
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-xs font-medium text-slate-600 mt-2">
+                <Clock className="w-3.5 h-3.5 text-slate-400 animate-pulse" />
+                <span>
+                  Hoy:{' '}
+                  <span className="font-semibold capitalize">
+                    {fechaSistema.toLocaleDateString('es-ES', {
+                      weekday: 'long',
+                      day: 'numeric',
+                      month: 'long',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      second: '2-digit'
+                    })}
                   </span>
-                </div>
-                <button
-                  onClick={() => setModalConfig(null)}
-                  className="rounded-full p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-all cursor-pointer"
-                  title="Cerrar modal"
-                >
-                  <span className="sr-only">Cerrar</span>
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
+                </span>
               </div>
+            )}
+          </div>
 
-              {/* Body */}
-              <div className="space-y-3.5">
-                <h3 className="text-lg font-extrabold text-neutral-950 leading-tight">
+          {/* Columna Derecha: Imagen FAADU */}
+          <div className="flex justify-center md:justify-end">
+            <img
+              src={logoFaaduSrc}
+              alt="Logo FAADU"
+              className="h-24 object-contain transition-all duration-300 hover:scale-105"
+              onError={() => setLogoFaaduSrc('/faadu-logo.png')}
+            />
+          </div>
+        </div>
+      </header>
+
+      {/* Sección Central (Bloques de la APP) */}
+      <section className="flex-1 max-w-7xl w-full mx-auto px-4 md:px-8 py-10 space-y-8">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between border-b border-slate-200 pb-5 gap-4">
+          <div>
+            <h2 className="text-2xl font-black text-slate-900 tracking-tight">
+              Cronograma del Evento
+            </h2>
+            <p className="text-sm text-slate-500 mt-1">
+              Seleccione un día para explorar los horarios y ponencias virtuales
+            </p>
+          </div>
+
+          {/* Badge EN VIVO global si hay alguna ponencia en vivo actualmente en el día de hoy */}
+          {fechaSistema && (
+            (() => {
+              const hoyD = Object.values(CRONOGRAMA_OFICIAL).find((d) => esElDiaDeHoy(d, fechaSistema))
+              const enVivoAhora = hoyD?.eventos.some((e) => obtenerEstadoPonencia(e, hoyD) === 'en-vivo' && e.expositores.length > 0)
+              if (enVivoAhora) {
+                return (
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-red-600 text-white font-bold text-xs tracking-wider animate-pulse shadow-md">
+                    <span className="w-2.5 h-2.5 rounded-full bg-white animate-ping"></span>
+                    <span>TRANSMISIÓN EN VIVO AHORA</span>
+                  </div>
+                )
+              }
+              return null
+            })()
+          )}
+        </div>
+
+        {/* Pestañas de Selección de Días */}
+        <div className="flex flex-wrap gap-2 md:gap-3 bg-white p-2 rounded-xl shadow-xs border border-slate-200">
+          {Object.values(CRONOGRAMA_OFICIAL).map((dia) => {
+            const isSelected = diaActual === dia.diaClave
+            const esHoy = fechaSistema && esElDiaDeHoy(dia, fechaSistema)
+
+            return (
+              <button
+                key={dia.diaClave}
+                onClick={() => setDiaActual(dia.diaClave)}
+                className={`flex-1 min-w-[140px] px-4 py-3 rounded-lg text-xs md:text-sm font-bold tracking-tight transition-all duration-200 cursor-pointer ${
+                  isSelected
+                    ? 'bg-amber-500 text-white shadow-md scale-[1.02]'
+                    : 'bg-white hover:bg-slate-50 text-slate-600 border border-slate-200 hover:border-amber-400'
+                } relative`}
+              >
+                {dia.etiqueta}
+                {esHoy && (
+                  <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+                  </span>
+                )}
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Detalle del enfoque del día seleccionado */}
+        <div className="bg-amber-500/10 border-l-4 border-amber-500 p-4 rounded-r-lg">
+          <p className="text-xs uppercase tracking-widest font-extrabold text-amber-800">Enfoque Académico Diario</p>
+          <h3 className="text-base font-black text-slate-900 mt-0.5">{diaSeleccionadoObj.enfoque}</h3>
+        </div>
+
+        {/* Tarjetas de Ponencias del Día */}
+        <div className="grid gap-4">
+          {diaSeleccionadoObj.eventos.map((evento) => {
+            const estado = obtenerEstadoPonencia(evento, diaSeleccionadoObj)
+            const esEnVivo = estado === 'en-vivo'
+            const esPasado = estado === 'pasado'
+            const tieneExpositores = evento.expositores.length > 0
+
+            return (
+              <div
+                key={evento.id}
+                className={`relative bg-white rounded-xl border p-5 md:p-6 transition-all duration-300 ${
+                  esEnVivo
+                    ? 'border-amber-500 ring-2 ring-amber-500/20 bg-amber-50/20 shadow-md scale-[1.01]'
+                    : esPasado
+                    ? 'border-slate-200 bg-slate-50/50 opacity-75'
+                    : 'border-slate-200 hover:shadow-md hover:border-slate-300'
+                }`}
+              >
+                {/* Badge EN VIVO */}
+                {esEnVivo && tieneExpositores && (
+                  <span className="absolute -top-3 left-6 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-600 text-white font-extrabold text-[10px] tracking-widest uppercase shadow-sm">
+                    <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+                    🔴 EN VIVO AHORA
+                  </span>
+                )}
+
+                <div className="flex flex-col md:flex-row gap-5 items-start md:items-center justify-between">
+                  {/* Horario y Lugar */}
+                  <div className="flex flex-row md:flex-col items-center md:items-start gap-3 md:gap-1.5 min-w-[150px]">
+                    <div className="flex items-center gap-1.5 text-slate-900 font-extrabold text-sm md:text-base">
+                      <Clock className="w-4 h-4 text-slate-400 shrink-0" />
+                      <span>{evento.horaInicio} - {evento.horaFin}</span>
+                    </div>
+                    <div className="flex items-center gap-1 text-slate-400 text-xs font-semibold">
+                      <MapPin className="w-3.5 h-3.5 shrink-0" />
+                      <span className="truncate max-w-[180px] md:max-w-none">{evento.lugar}</span>
+                    </div>
+                  </div>
+
+                  {/* Detalle Ponencia */}
+                  <div className="flex-1 space-y-1">
+                    <h4 className="text-sm md:text-base font-bold text-slate-900 leading-snug">
+                      {evento.titulo}
+                    </h4>
+                    {tieneExpositores && (
+                      <p className="text-xs md:text-sm text-slate-500 font-medium">
+                        🎙️ <span className="font-semibold text-slate-600">{evento.expositores.join(', ')}</span>
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Acciones e interacción QR */}
+                  {tieneExpositores && (
+                    <div className="flex items-center gap-3 pt-3 md:pt-0 w-full md:w-auto shrink-0 justify-end">
+                      {esEnVivo ? (
+                        <div className="flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-lg p-2 shadow-xs w-full md:w-auto justify-between">
+                          <a
+                            href={evento.linkFacebook}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 bg-[#1877F2] text-white px-4 py-2 rounded-md font-bold text-xs hover:bg-blue-700 transition-colors shadow-sm cursor-pointer whitespace-nowrap"
+                          >
+                            <FacebookIcon className="w-4 h-4 shrink-0" />
+                            Entrar a Facebook Live
+                          </a>
+                          <div
+                            className="bg-white p-1 rounded-md border border-blue-200 cursor-zoom-in hover:scale-105 transition-transform shrink-0"
+                            title="Ampliar código QR"
+                            onClick={() => setQrAmpliado(evento.linkFacebook)}
+                          >
+                            <QRCodeSVG value={evento.linkFacebook} size={42} level="M" />
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2.5 w-full md:w-auto justify-end">
+                          <a
+                            href={esPasado ? undefined : evento.linkFacebook}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`px-4 py-2 rounded-md font-bold text-xs tracking-wide transition-all w-full md:w-auto text-center ${
+                              esPasado
+                                ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                                : 'bg-slate-900 text-white hover:bg-slate-800 shadow-sm cursor-pointer'
+                            }`}
+                          >
+                            {esPasado ? 'Finalizado' : 'Entrar'}
+                          </a>
+                          {!esPasado && (
+                            <div
+                              className="bg-white p-1 rounded-md border border-slate-200 cursor-zoom-in hover:scale-105 transition-transform shrink-0"
+                              title="Ampliar código QR"
+                              onClick={() => setQrAmpliado(evento.linkFacebook)}
+                            >
+                              <QRCodeSVG value={evento.linkFacebook} size={36} level="M" />
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Apartado "Coordina y Modera" Inferior */}
+        <div className="bg-slate-100 rounded-xl border border-slate-200 p-6 md:p-8 space-y-4">
+          <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
+            <Users className="w-5 h-5 text-amber-500" />
+            <h3 className="font-extrabold text-sm md:text-base tracking-tight text-slate-800">
+              EQUIPO DE COORDINACIÓN NOCTURNA (20:00 - 21:00)
+            </h3>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs md:text-sm border-collapse">
+              <tbody>
+                <tr className="border-b border-slate-200/60">
+                  <td className="py-2.5 pr-4 font-bold text-slate-500 uppercase tracking-wider w-[240px]">
+                    MODERADOR
+                  </td>
+                  <td className="py-2.5 font-bold text-slate-800">
+                    {diaSeleccionadoObj.coordinacion.moderador}
+                  </td>
+                </tr>
+                <tr className="border-b border-slate-200/60">
+                  <td className="py-2.5 pr-4 font-bold text-slate-500 uppercase tracking-wider">
+                    SECRETARIO DE ACTAS
+                  </td>
+                  <td className="py-2.5 font-bold text-slate-800">
+                    {diaSeleccionadoObj.coordinacion.secretarioActas}
+                  </td>
+                </tr>
+                <tr className="border-b border-slate-200/60">
+                  <td className="py-2.5 pr-4 font-bold text-slate-500 uppercase tracking-wider">
+                    COORDINADOR CRTP
+                  </td>
+                  <td className="py-2.5 font-bold text-slate-800">
+                    {diaSeleccionadoObj.coordinacion.coordinadorCRTP}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-2.5 pr-4 font-bold text-slate-500 uppercase tracking-wider">
+                    RESPONSABLE DE ASISTENCIA
+                  </td>
+                  <td className="py-2.5 font-bold text-slate-800">
+                    {diaSeleccionadoObj.coordinacion.responsableAsistencia}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* Ventana Modal Emergente: Alerta de Transmisión */}
+      {modalConfig && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
+          <div
+            className="w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden transform scale-100 transition-all duration-300 animate-in fade-in zoom-in-95"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Cabecera Modal */}
+            <div className="bg-gradient-to-r from-red-600 to-amber-500 p-5 flex items-center justify-between text-white">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-white animate-ping"></span>
+                <span className="text-xs font-black tracking-widest uppercase">ALERTA DE TRANSMISIÓN EN VIVO</span>
+              </div>
+              <button
+                onClick={() => setModalConfig(null)}
+                className="text-white/80 hover:text-white hover:bg-white/10 p-1.5 rounded-full transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Contenido Modal */}
+            <div className="p-6 space-y-5">
+              <div className="space-y-2">
+                <p className="text-xs text-amber-600 font-extrabold uppercase tracking-widest">PONENCIA EMPEZANDO</p>
+                <h3 className="text-lg md:text-xl font-bold text-neutral-950 leading-snug">
                   {modalConfig.titulo}
                 </h3>
+              </div>
 
-                {modalConfig.tipo === 'cambio' && modalConfig.tituloAnterior && (
-                  <p className="text-xs text-gray-500 italic">
-                    Anterior: <span className="line-through">{modalConfig.tituloAnterior}</span>
-                  </p>
-                )}
-
-                {/* Fila destacada justo debajo del título */}
-                <div className="flex items-center gap-2 rounded-lg bg-orange-100/60 px-3.5 py-2.5 border border-orange-200">
-                  <Clock className="h-5 w-5 text-orange-600 animate-pulse shrink-0" />
-                  <span className="text-sm font-bold text-neutral-950">
-                    Horario de Transmisión: <span className="font-extrabold text-black">{modalConfig.horaInicio} - {modalConfig.horaFin}</span>
+              {/* Informaciones de Tiempo y Fecha en Alto Contraste */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="flex items-center gap-2.5 bg-slate-100 px-4 py-3 rounded-lg border border-slate-200">
+                  <Calendar className="w-4 h-4 text-slate-500 shrink-0" />
+                  <span className="text-xs md:text-sm text-neutral-950 font-bold">
+                    Fecha: <span className="font-extrabold">{diaSeleccionadoObj.etiqueta.split(' de ')[0]}</span>
                   </span>
                 </div>
-
-                {/* Caja color crema con orden jerárquico */}
-                <div className="rounded-xl bg-[#FAF6F0] p-5 border border-amber-200/60 shadow-inner space-y-3">
-                  {/* 1. Título de la Ponencia */}
-                  <h4 className="text-base font-extrabold text-gray-900 leading-snug">
-                    {modalConfig.nombrePonencia}
-                  </h4>
-
-                  {/* 2. 📅 Fecha: [Día] [DD/MM/AAAA] (Dinámico) */}
-                  <div className="flex items-center gap-2 text-neutral-900 font-semibold text-xs bg-amber-100/50 px-2.5 py-1 rounded-md w-fit border border-amber-200/50">
-                    <Calendar className="h-3.5 w-3.5 text-amber-700" />
-                    <span>Fecha: {modalConfig.fechaFormateada}</span>
-                  </div>
-
-                  {/* 3. 🕒 Horario */}
-                  <div className="flex items-center gap-2 text-neutral-900 font-semibold text-xs bg-amber-100/50 px-2.5 py-1 rounded-md w-fit border border-amber-200/50">
-                    <Clock className="h-3.5 w-3.5 text-amber-700" />
-                    <span>Horario: {modalConfig.horaInicio} - {modalConfig.horaFin}</span>
-                  </div>
-
-                  {/* 4. 🎙️ Expositores */}
-                  {modalConfig.expositores && modalConfig.expositores.length > 0 && (
-                    <div className="text-xs md:text-sm text-gray-600 flex items-start gap-1.5">
-                      <span className="shrink-0 text-gray-500">🎙️</span>
-                      <p>
-                        <strong className="font-semibold text-gray-700">Expositores:</strong> {modalConfig.expositores.join(', ')}
-                      </p>
-                    </div>
-                  )}
-
-                  {/* 5. 📍 Lugar / Auditorio */}
-                  {modalConfig.lugar && (
-                    <div className="text-xs text-gray-500 flex items-start gap-1.5">
-                      <span className="shrink-0 text-gray-400">📍</span>
-                      <p>
-                        <strong className="font-semibold text-gray-600">Lugar:</strong> {modalConfig.lugar}
-                      </p>
-                    </div>
-                  )}
+                <div className="flex items-center gap-2.5 bg-slate-100 px-4 py-3 rounded-lg border border-slate-200">
+                  <Clock className="w-4 h-4 text-slate-500 shrink-0" />
+                  <span className="text-xs md:text-sm text-neutral-950 font-bold">
+                    Horario: <span className="font-extrabold">{modalConfig.horaInicio} - {modalConfig.horaFin}</span>
+                  </span>
                 </div>
               </div>
 
-              {/* Actions & Exclusive Facebook Live Channel */}
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-gray-100">
-                {/* Facebook Live Option */}
-                <div className="flex items-center justify-between gap-2.5 rounded-lg border border-blue-200 bg-blue-50/10 p-2.5 shadow-sm w-full sm:w-auto flex-1">
-                  <div className="flex-1 min-w-0">
-                    <a
-                      href={modalConfig.linkFacebook || 'https://www.facebook.com/profile.php?id=100047802766633'}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => setModalConfig(null)}
-                      className="w-full text-center rounded-lg px-3 py-2 text-xs font-bold text-white shadow-md hover:brightness-95 active:brightness-90 transition-all cursor-pointer block bg-[#1877F2]"
-                    >
-                      Entrar a Facebook Live
-                    </a>
-                  </div>
-                  <div
-                    className="shrink-0 flex items-center justify-center bg-white p-1 rounded-md border border-blue-200 hover:scale-105 transition-transform duration-200 cursor-zoom-in"
-                    title="Click para ampliar QR"
-                    onClick={() => setQrAmpliado(modalConfig.linkFacebook || 'https://www.facebook.com/profile.php?id=100047802766633')}
+              {/* Caja de detalles de los expositores */}
+              {modalConfig.expositores.length > 0 && (
+                <div className="bg-amber-500/5 border border-amber-500/20 p-4 rounded-xl space-y-1.5">
+                  <span className="text-[10px] uppercase tracking-wider font-extrabold text-amber-700 block">Expositores Oficiales</span>
+                  <p className="text-xs md:text-sm text-slate-700 font-semibold leading-relaxed">
+                    {modalConfig.expositores.join(', ')}
+                  </p>
+                </div>
+              )}
+
+              {/* Enlace y QR */}
+              <div className="flex flex-col sm:flex-row items-center gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                <div className="flex-1 w-full text-center sm:text-left space-y-1">
+                  <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider">CANAL OFICIAL</h4>
+                  <p className="text-xs text-slate-400 truncate max-w-[280px]">{modalConfig.linkFacebook}</p>
+                </div>
+                <div className="flex items-center gap-3 w-full sm:w-auto shrink-0 justify-center">
+                  <a
+                    href={modalConfig.linkFacebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 bg-[#1877F2] text-white px-4 py-2.5 rounded-lg font-bold text-xs hover:bg-blue-700 transition-colors shadow-md cursor-pointer whitespace-nowrap"
                   >
-                    <QRCodeSVG
-                      value={modalConfig.linkFacebook || 'https://www.facebook.com/profile.php?id=100047802766633'}
-                      size={48}
-                      level="M"
-                      includeMargin={false}
-                    />
+                    <FacebookIcon className="w-4 h-4" />
+                    Ingresar a Facebook
+                  </a>
+                  <div
+                    className="bg-white p-1 rounded-md border border-slate-200 cursor-zoom-in hover:scale-105 transition-transform"
+                    title="Ampliar código QR"
+                    onClick={() => setQrAmpliado(modalConfig.linkFacebook)}
+                  >
+                    <QRCodeSVG value={modalConfig.linkFacebook} size={48} level="M" />
                   </div>
                 </div>
-
-                {/* Descartar Button */}
-                <button
-                  onClick={() => setModalConfig(null)}
-                  className="w-full sm:w-auto rounded-lg border border-gray-200 px-4 py-2.5 text-xs md:text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer shrink-0"
-                >
-                  Descartar
-                </button>
               </div>
+            </div>
+
+            {/* Footer Modal */}
+            <div className="bg-slate-50 px-6 py-4 flex justify-end border-t border-slate-100">
+              <button
+                onClick={() => setModalConfig(null)}
+                className="bg-white text-slate-700 px-4 py-2 border border-slate-300 rounded-lg text-xs font-bold hover:bg-slate-50 transition-colors cursor-pointer"
+              >
+                Descartar Alerta
+              </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Lightbox Modal para QR Ampliado */}
+      {/* Lightbox para QR Ampliado */}
       {qrAmpliado && (
         <div
-          className="fixed inset-0 z-[120] flex items-center justify-center bg-black/60 backdrop-blur-sm cursor-zoom-out p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm cursor-zoom-out p-4"
           onClick={() => setQrAmpliado(null)}
         >
           <div
-            className="relative bg-white p-6 rounded-xl shadow-2xl flex flex-col items-center justify-center border border-gray-100 max-w-sm w-full animate-modal-pop cursor-default"
+            className="bg-white p-6 rounded-2xl shadow-2xl flex flex-col items-center justify-center border border-slate-200 max-w-sm w-full relative cursor-default animate-in fade-in zoom-in-95"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close Button */}
+            {/* Botón cerrar */}
             <button
               onClick={() => setQrAmpliado(null)}
-              className="absolute top-3 right-3 rounded-full p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-all cursor-pointer"
+              className="absolute top-3 right-3 rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-all cursor-pointer"
               title="Cerrar vista ampliada"
             >
-              <span className="sr-only">Cerrar</span>
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
-              </svg>
+              <X className="h-5 w-5" />
             </button>
 
             {/* QR Content */}
-            <div className="bg-white p-2 rounded-lg border border-gray-200 shadow-sm mt-4">
-              <QRCodeSVG
-                value={qrAmpliado}
-                size={300}
-                level="H"
-                includeMargin={true}
-              />
+            <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-sm mt-3">
+              <QRCodeSVG value={qrAmpliado} size={300} level="H" includeMargin={true} />
             </div>
-            <p className="mt-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">
-              Escanea para entrar a la transmisión
+
+            <p className="mt-4 text-center text-xs font-bold text-slate-500 uppercase tracking-widest">
+              Escanee para ingresar a la transmisión
             </p>
           </div>
         </div>
       )}
 
       {/* Footer Institucional de Dos Columnas */}
-      <footer className="border-t-2 border-gray-200 bg-white py-8 px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-6xl">
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-6 items-center">
-            {/* Columna Izquierda: Información CRTP */}
-            <div className="text-center md:text-left space-y-2">
-              <h3 className="text-base font-extrabold text-neutral-900 uppercase tracking-tight">
-                Centro de Recursos Tecnológicos y Pedagógicos
-              </h3>
-              <p className="text-xs sm:text-sm text-gray-600 max-w-xl leading-relaxed">
-                Calle Héroes del Acre Nro. 1850 | Teléfono: (591-2) 2491481 2484818-int 117 | Email:{' '}
-                <a href="mailto:faadu.crtp@umsa.bo" className="text-orange-600 font-semibold hover:underline">
-                  faadu.crtp@umsa.bo
-                </a>
-              </p>
-            </div>
+      <footer className="bg-white border-t border-slate-200 py-8 px-4 md:px-8 mt-12 text-slate-600">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-[1fr_auto] gap-8 items-center">
+          {/* Columna Izquierda: Datos CRTP */}
+          <div className="text-center md:text-left space-y-2">
+            <h3 className="text-sm font-extrabold text-slate-900 uppercase tracking-widest">
+              Centro de Recursos Tecnológicos y Pedagógicos (CRTP)
+            </h3>
+            <p className="text-xs md:text-sm text-slate-500 leading-relaxed max-w-2xl">
+              Calle Héroes del Acre Nro. 1850 | Teléfono: (591-2) 2491481 2484818-int 117 | Email:{' '}
+              <a href="mailto:faadu.crtp@umsa.bo" className="text-amber-600 font-bold hover:underline transition-colors">
+                faadu.crtp@umsa.bo
+              </a>
+            </p>
+          </div>
 
-            {/* Columna Derecha: Logo CRTP */}
-            <div className="flex justify-center md:justify-end shrink-0">
-              <img
-                src="/logo_crtp.png"
-                alt="Logo CRTP FAADU-UMSA"
-                className="h-20 object-contain"
-              />
-            </div>
+          {/* Columna Derecha: Logotipo CRTP */}
+          <div className="flex justify-center md:justify-end">
+            <img
+              src={logoCrtpSrc}
+              alt="Logo CRTP"
+              className="h-20 object-contain transition-all duration-300 hover:scale-105"
+              onError={() => setLogoCrtpSrc('/logo_crtp.png')}
+            />
           </div>
-          <div className="mt-8 border-t border-gray-200 pt-6 text-center text-xs text-gray-500">
-            <p>© 2026 Facultad de Arquitectura, Artes, Diseño y Urbanismo (FAADU) - UMSA. Todos los derechos reservados.</p>
-          </div>
+        </div>
+        <div className="max-w-7xl mx-auto mt-8 pt-6 border-t border-slate-100 text-center text-[10px] font-medium text-slate-400 uppercase tracking-wider">
+          © 2026 Facultad de Arquitectura, Artes, Diseño y Urbanismo (FAADU) - UMSA. Todos los derechos reservados.
         </div>
       </footer>
     </main>
-  )
-}
-
-interface EventoCardProps {
-  evento: EventoConEstado
-  onQrClick: (url: string) => void
-}
-
-function EventoCard({ evento, onQrClick }: EventoCardProps) {
-  const esEnVivo = evento.estado === 'en-vivo'
-  const esReceso = evento.estado === 'receso'
-  const esPasado = evento.estado === 'pasado'
-  const tieneExpo = evento.expositores.length > 0
-
-  return (
-    <div
-      className={`relative rounded-lg border-2 p-6 transition-all duration-300 ${esEnVivo
-        ? 'border-orange-600 bg-orange-50 shadow-lg'
-        : esPasado
-          ? 'border-gray-200 bg-gray-100 opacity-80'
-          : 'border-gray-200 bg-white hover:shadow-md'
-        } ${esReceso ? 'border-dashed' : ''}`}
-      style={esEnVivo ? { borderColor: '#E5820C', backgroundColor: '#FFF5E6' } : {}}
-    >
-      {/* Badge EN VIVO */}
-      {esEnVivo && (
-        <div
-          className="absolute -top-3 left-4 inline-flex items-center gap-2 rounded-full px-3 py-1"
-          style={{ backgroundColor: '#E5820C' }}
-        >
-          <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-red-500"></span>
-          <span className="text-xs font-bold text-white lg:text-sm">EN VIVO AHORA</span>
-        </div>
-      )}
-
-      {/* Contenido */}
-      <div className="grid gap-4 lg:grid-cols-[130px_1fr_auto] lg:items-center">
-        {/* Hora con alto contraste y visibilidad garantizada */}
-        <div className="flex items-center justify-center lg:justify-start min-w-[110px]">
-          <span
-            className={`font-extrabold text-base lg:text-lg tracking-tight ${esEnVivo ? 'text-orange-600' : 'text-neutral-950'
-              }`}
-            style={esEnVivo ? { color: '#E5820C' } : {}}
-          >
-            {evento.horaInicio} - {evento.horaFin}
-          </span>
-        </div>
-
-        {/* Título y Expositores */}
-        <div className="flex flex-col gap-2 pt-4 lg:pt-0">
-          <h3 className={`font-bold text-neutral-900 text-sm md:text-base ${esPasado ? 'text-neutral-700' : ''}`}>
-            {evento.titulo}
-          </h3>
-          {tieneExpo && (
-            <p className={`text-sm font-medium ${esPasado ? 'text-neutral-500' : 'text-neutral-600'}`}>
-              {evento.expositores.join(', ')}
-            </p>
-          )}
-          {evento.lugar && (
-            <p className="text-xs text-neutral-500">
-              📍 {evento.lugar}
-            </p>
-          )}
-        </div>
-
-        {/* Acciones */}
-        {!esReceso && tieneExpo && (
-          <div className="flex items-center gap-3 pt-4 lg:pt-0">
-            {esEnVivo ? (
-              <div className="flex items-center gap-2.5 rounded-lg border border-blue-200 bg-blue-50/10 p-2 shadow-sm">
-                <a
-                  href={evento.linkFacebook || 'https://www.facebook.com/profile.php?id=100047802766633'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="rounded-lg px-4 py-2 text-xs font-bold text-white shadow-md hover:brightness-95 active:brightness-90 transition-all cursor-pointer block bg-[#1877F2]"
-                >
-                  Entrar a Facebook Live
-                </a>
-                <div
-                  className="shrink-0 flex items-center justify-center bg-white p-1 rounded border border-blue-200 hover:scale-105 transition-transform duration-200 cursor-zoom-in"
-                  title="Click para ampliar QR"
-                  onClick={() => onQrClick(evento.linkFacebook || 'https://www.facebook.com/profile.php?id=100047802766633')}
-                >
-                  {evento.qrFacebook ? (
-                    <img
-                      src={evento.qrFacebook}
-                      alt="Código QR Facebook"
-                      className="h-10 w-10 object-contain"
-                    />
-                  ) : (
-                    <QRCodeSVG
-                      value={evento.linkFacebook || 'https://www.facebook.com/profile.php?id=100047802766633'}
-                      size={40}
-                      level="M"
-                      includeMargin={false}
-                    />
-                  )}
-                </div>
-              </div>
-            ) : (
-              <a
-                href={evento.linkFacebook || '#'}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`rounded-lg px-4 py-2.5 font-bold text-sm text-white transition-all duration-200 cursor-pointer ${esPasado ? 'bg-gray-400 cursor-not-allowed opacity-60' : 'bg-blue-600 hover:bg-blue-700'
-                  }`}
-                onClick={(e) => {
-                  if (esPasado || !evento.linkFacebook) e.preventDefault()
-                }}
-              >
-                {esPasado ? 'Finalizado' : 'Entrar'}
-              </a>
-            )}
-          </div>
-        )}
-      </div>
-    </div>
   )
 }
