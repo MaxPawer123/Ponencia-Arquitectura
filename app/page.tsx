@@ -43,58 +43,6 @@ interface DiaCronograma {
 
 // 1. Estructura de Datos e Inyección del Cronograma Oficial Completo
 const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
-  viernes03: {
-    diaClave: 'viernes03',
-    etiqueta: 'Viernes 03 de Julio',
-    enfoque: 'SESIÓN DE PRUEBAS EN TIEMPO REAL - FAADU',
-    fecha: { year: 2026, month: 6, date: 3 }, // Julio es 6 (0-indexed)
-    eventos: [
-      {
-        id: 'v03-reg',
-        horaInicio: '09:00',
-        horaFin: '09:30',
-        titulo: 'Inscripciones y registro',
-        expositores: [],
-        lugar: 'Previos del CRTP',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
-      },
-      {
-        id: 'v03-test1',
-        horaInicio: '14:00',
-        horaFin: '15:00',
-        titulo: 'Evento Prueba del RTP 1',
-        expositores: ['Personal del CRTP'],
-        lugar: 'Previos del CRTP',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/',
-        enfoque: 'Pruebas'
-      },
-      {
-        id: 'v03-test2',
-        horaInicio: '15:00',
-        horaFin: '16:00',
-        titulo: 'Evento Prueba del RTP 2',
-        expositores: ['Personal del CRTP'],
-        lugar: 'Previos del CRTP',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/',
-        enfoque: 'Pruebas'
-      },
-      {
-        id: 'v03-noc',
-        horaInicio: '20:00',
-        horaFin: '21:00',
-        titulo: 'Sesión de Prueba Nocturna',
-        expositores: ['Personal del CRTP'],
-        lugar: 'Previos del CRTP',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
-      }
-    ],
-    coordinacion: {
-      moderador: 'PERSONAL DEL CRTP',
-      secretarioActas: 'PERSONAL DEL CRTP',
-      coordinadorCRTP: 'PERSONAL DEL CRTP',
-      responsableAsistencia: 'PERSONAL DEL CRTP'
-    }
-  },
   lunes: {
     diaClave: 'lunes',
     etiqueta: 'Lunes 06 de Julio',
@@ -108,7 +56,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'Inscripciones y registro',
         expositores: [],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'lun-auth',
@@ -117,7 +65,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'Intervención de autoridades de la FAADU',
         expositores: ['Autoridades FAADU'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'lun-acad',
@@ -126,7 +74,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'Comisión academica',
         expositores: ['Comisión Académica'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'lun-1',
@@ -135,7 +83,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'Del Modelo Declarativo a la Operatividad Socioformativa: Propuesta del Perfil de Egreso y Profesional del Arquitecto FAADU-UMSA 2026 ante la Complejidad Territorial y Laboral del Siglo XXI',
         expositores: ['Fabiola Zaballa', 'Paola Carvallo', 'Silvia Bustos', 'Humberto Candia', 'Manuel Ascarrunz', 'Jahdiel Villafuerte', 'Leonor Cuevas'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'lun-2',
@@ -144,7 +92,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'EL PERFIL PROFESIONAL DEL ARQUITECTO EN LA FAADU-UMSA: Una reflexión crítica desde las demandas contemporáneas de la disciplina y la sociedad.',
         expositores: ['Arq. Ismael Carvajal Vogtschmidt'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'lun-3',
@@ -153,7 +101,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'PROPUESTA CONTEMPORÁNEA DE COMPETENCIAS PARA LA FORMACIÓN PROFESIONAL EN ARQUITECTURA A partir del documento Competencias Plan de Estudios 2008 y de referentes institucionales, globales y latinoamericanos',
         expositores: ['MsC. Arq. Roberto Moreira Cordova'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'lun-4',
@@ -162,7 +110,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'PERFIL DE EGRESO Y PERFIL PROFESIONAL EN EL PROCESO DE REDISEÑO CURRICULAR DE LA CARRERA DE ARQUITECTURA',
         expositores: ['MsC. Arq. Williams Terrazas'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'lun-5',
@@ -171,7 +119,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'LÍDER CULTURAL: HACIA UN NUEVO PERFIL DEL ARQUITECTO FAADU – UMSA',
         expositores: ['Arq. Salomon Espejo Quispe'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'lun-6',
@@ -180,7 +128,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'OPORTUNIDADES LABORALES PARA ARQUITECTOS EN EL SECTOR PUBLICO BOLIVIANO',
         expositores: ['Ezequiel Callisaya Sanchez', 'Alison Angeles Gutierrez Condori', 'Yerly Marupa Colque', 'Jhael Massiel Ramirez Aguilar'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'lun-deb',
@@ -189,7 +137,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'Conclusiones y debate',
         expositores: [],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'lun-noc',
@@ -197,8 +145,8 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         horaFin: '21:00',
         titulo: 'Rediseño curricular en Artes Plasticas',
         expositores: ['Docentes e Invitados FAADU'],
-        lugar: 'Exposicion virtual GOOGLE MEET - FACEBOOK LIVE',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        lugar: 'Exposicion virtual FACEBOOK LIVE',
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       }
     ],
     coordinacion: {
@@ -221,7 +169,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'Inscripciones y registro',
         expositores: [],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'mar-7',
@@ -230,7 +178,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'PROPUESTA DE FORTALECIMIENTO DEL TALLER VERTICAL',
         expositores: ['MsC. Arq. Roberto Moreira Cordova'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'mar-8',
@@ -239,7 +187,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'EQUIPAMIENTOS DEMANDADOS VS EQUIPAMIENTOS PROYECTADOS',
         expositores: ['Derick Yura chuquimia', 'Evelin Maya Callisaya', 'Vargas Grover Eduardo Gutierrez Mamani', 'Melany Carolay Mendoza Gutierrez', 'Ruth Ramos Villa'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'mar-9',
@@ -248,7 +196,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'ESTRATEGIAS DE ARTICULACIÓN E INTEGRACIÓN ENTRE LAS ÁREAS DE CONOCIMIENTO DE TALLER DE PROYECTOS Y EDIFICACIONES',
         expositores: ['Arq. Gustavo Arce Valdivia'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'mar-10',
@@ -257,7 +205,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'PROYECTO, PROYECTUALIDAD Y TALLER',
         expositores: ['Arq. Guillermo Vladimir Muñoz Marquez'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'mar-11',
@@ -266,7 +214,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'PROPUESTA DE CREACIÓN DEL TALLER DE URBANISMO',
         expositores: ['MsC. Arq. Roberto Moreira Cordova'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'mar-12',
@@ -275,7 +223,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'PROPUESTA PARA LA CREACIÓN DEL LABORATORIO DE TERRITORIO Y PROYECTO (LAB T-P) Mediante la investigación situada, la vinculación social y la praxis transformadora',
         expositores: ['Arq. Gianni Renzo Borja Godoy'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'mar-13',
@@ -284,7 +232,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'REGLAMENTO DE EVALUACIÓN DOCENTE DE LA CARRERA DE ARQUITECTURA',
         expositores: ['MsC. Arq. Roberto Moreira Cordova'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'mar-14',
@@ -293,7 +241,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'GESTOR DE PROYECTOS, INNOVACIÓN Y VINCULACIÓN',
         expositores: ['MsC. Arq. David Antonio Vila Fonseca'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'mar-deb',
@@ -302,7 +250,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'Conclusiones y debate',
         expositores: [],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'mar-noc',
@@ -310,8 +258,8 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         horaFin: '21:00',
         titulo: 'EL SISTEMA DE LAS PRÁCTICAS Hacia una nueva educación en Arquitectura. FAADU UMSA',
         expositores: ['Comisión de Prácticas Académicas'],
-        lugar: 'Exposicion virtual GOOGLE MEET - FACEBOOK LIVE',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        lugar: '',
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       }
     ],
     coordinacion: {
@@ -334,7 +282,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'Inscripciones y registro',
         expositores: [],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'mie-15',
@@ -343,7 +291,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'REDISEÑO CURRICULAR : FORMANDO AL ARQUITECTO DEL FUTURO EN LA UMSA',
         expositores: ['PhD. Ing. Carlos Fernandez Mariño'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'mie-16',
@@ -352,7 +300,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'Rediseño Curricular de la Carrera de Arquitectura FAADU–UMSA: Un Modelo Integrado de Formación por Competencias con Enfoque Territorial, Tecnológico e Investigativo',
         expositores: ['Arq. Haydee Bascope Guzmán', 'Arq. Franklin Cuevas Moya', 'MSc. Arq. Zazanda Salcedo Gutierrez', 'Arq. Ricardo Alfaro', 'MSc. Arq. Danilo Raznatovic'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'mie-17',
@@ -361,7 +309,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'EL ARQUITECTO Y LOS DESAFÍOS EN PROYECTOS DE INVERSIÓN PÚBLICA CONSTRUYENDO EL PERFIL PROFESIONAL Y PERFIL DE EGRESO',
         expositores: ['M.Sc. Ing. Gloria Isla Llanos'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'mie-18',
@@ -370,7 +318,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'PROPUESTA DE OPTIMIZACIÓN EN EL ACCESO AL POSTGRADO DESDE EL GRADO EN LA CARRERA DE ARQUITECTURA FAADU-UMSA MODELO APLICADO A LA Maestría en Patrimonio Cultural (Su aplicación puede ampliarse a otras Maestrías)',
         expositores: ['Arq. M.Sc. Luis Raul C. Prado Rios'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'mie-19',
@@ -379,7 +327,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'EL PLANO DEL PROFESIONAL CONTEMPORANEO Diseñando competencias transversales para sobrevivir a la obsolescencia técnica',
         expositores: ['M.Sc. Arq. Heidi Mendoza Barrau'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'mie-20',
@@ -388,7 +336,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'PROPUESTA RECTORA DE LA REFORMA CURRICULAR Ejes estrategicos',
         expositores: ['MsC. Arq. Roberto Moreira Cordova'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'mie-21',
@@ -397,7 +345,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'EPISTEMOLOGÍA DEL HÁBITAT Y LA INNOVACIÓN CURRICULAR: HACIA UN PERFIL PROFESIONAL DE LA ARQUITECTURA EN BOLIVIA 2027',
         expositores: ['Univ. Orlando Baltazar Quispe Roman'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'mie-22',
@@ -406,7 +354,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'DEL GESTO AL CRITERIO: FORMACIÓN ACADEMICA Y CONSTRUCCION DEL JUICIO ARQUITECTONICO EN LA ENSEÑANZA DEL PROYECTO',
         expositores: ['Univ. Juan Sebastian Garcia Fuentes'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'mie-deb',
@@ -415,7 +363,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'Conclusiones y debate',
         expositores: [],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'mie-noc',
@@ -423,8 +371,8 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         horaFin: '21:00',
         titulo: 'Curricula flexible y la maestria terminal',
         expositores: ['Comisión de Postgrado FAADU'],
-        lugar: 'Exposicion virtual GOOGLE MEET - FACEBOOK LIVE',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        lugar: 'Exposicion virtual FACEBOOK LIVE',
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       }
     ],
     coordinacion: {
@@ -447,7 +395,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'Inscripciones y registro',
         expositores: [],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'jue-23',
@@ -456,7 +404,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'PROYECTOS URBANOS ESTRATÉGICOS PARA LA TRANSFORMACIÓN TERRITORIAL DE LA PAZ 2026–2031: HACIA UN MODELO DE CIUDAD RESILIENTE, POLICÉNTRICA Y SOSTENIBLE',
         expositores: ['Univ. Suseth Camila Mejía Arroyo', 'Univ. José Manuel Peralta Villanueva', 'Docente: Mg Sc.Arq. José María L. Vargas Aliaga'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'jue-24',
@@ -465,7 +413,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: '¿Qué problemas estamos enseñando a resolver? Análisis territorial de los proyectos de grado de Arquitectura UMSA (2020-2024) como insumo para el rediseño curricular',
         expositores: ['Calle Nina, Maribel Lizeth', 'Castro Pinedo, Adriana', 'Iriarte Valles, Franklin Rolando', 'Huanca Poma, Evelin', 'Manrique Sanjines, Maria Fernanda', 'Ocaña Flores, Alessandro Daniel', 'Quino Aduviri, Sheyla Mariel', 'MSc. Arq. Ximena Cecilia León Villarroel'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'jue-25',
@@ -474,7 +422,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'CREACIÓN DE LA CARRERA DE URBANISMO Y AREA METROPOLITANA COMO RESPUESTA AL PROCESO DE CAMBIO DE CURRICULA ACADEMICA FAADU',
         expositores: ['PhD. Arq. Jorge Sainz Cardona'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'jue-26',
@@ -483,7 +431,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'ÁREAS DISCIPLINARES DEMANDADAS VS. ÁREAS DISCIPLINARES DESARROLLADAS',
         expositores: ['Perales Quisbert Keyti Yanine', 'Limachi Choque Eidan Josué', 'Cuentas Encinas Santiago'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'jue-27',
@@ -492,7 +440,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'INTERACCIÓN SOCIAL Y EXTENSIÓN UNIVERSITARIA EN LA CARRERA DE ARQUITECTURA FAADU – UMSA Propuesta para el Rediseño Curricular por Competencias 2027: Fundamentos históricos, contexto comparado y modelo operativo',
         expositores: ['Univ. Orlando Baltazar Quispe Román'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'jue-28',
@@ -501,7 +449,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'Ecologías de aprendizaje e interdependencia: una propuesta para el rediseño curricular de arquitectura',
         expositores: ['MsC. Arq. Vania Susana Calle Quispe'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'jue-29',
@@ -510,7 +458,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'Desconexión entre formación académica y demanda estatal de infraestructura en Bolivia',
         expositores: ['Avril Mayli Castro Castillo', 'Naira Estefani Mita Pajsi', 'Max Antony Tarqui Apaza'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'jue-30',
@@ -519,7 +467,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'Historia como generador de pensamiento crítico Postura Académica para el Sub Ámbito de Historia',
         expositores: ['Bascopé Haydeé', 'Calsina Rosario', 'Candia Humberto', 'Carvallo Paola', 'Escalante Javier', 'Espinoza Walter', 'Mendoza Heidi', 'Prado Luis'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'jue-deb',
@@ -528,7 +476,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'Conclusiones y debate',
         expositores: [],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'jue-noc',
@@ -536,8 +484,8 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         horaFin: '21:00',
         titulo: 'Inteligencia artificial aplicada a la carrera de arquitectura',
         expositores: ['Especialistas en Tecnología y Diseño Computacional'],
-        lugar: 'Exposicion virtual GOOGLE MEET - FACEBOOK LIVE',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        lugar: 'Exposicion virtual FACEBOOK LIVE',
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       }
     ],
     coordinacion: {
@@ -560,7 +508,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'Inscripciones y registro',
         expositores: [],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'vie-31',
@@ -569,7 +517,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'La Filosofía en la Enseñanza de la Arquitectura: Heidegger, Foucault y el Pensamiento Crítico del Espacio',
         expositores: ['Arq. Jorge E. Bolaños Medrano'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633  '
       },
       {
         id: 'vie-32',
@@ -578,7 +526,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'LA REPRESENTACIÓN Y EXPRESIÓN GRÁFICA COMO BASE DEL DESARROLLO DE COMPETENCIAS EN EL NUEVO CURRÍCULO DE ARQUITECTURA',
         expositores: ['MSc. Arq. Esdenka Araoz Acosta'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'vie-33',
@@ -587,7 +535,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'PROPUESTA DE LA IMPLEMENTACIÓN DE LA METODOLOGIA BIM EN EL CURRICULO DE LA CARRERA DE ARQUITECTURA FAADU',
         expositores: ['MsC. Arq. Roberto Moreira Cordova'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'vie-34',
@@ -596,7 +544,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'Propuesta de incorporación de una Malla Curricular BIM en la Carrera de Arquitectura FAADU-UMSA como estrategia de innovación curricular, transformación digital y fortalecimiento del perfil profesional',
         expositores: ['Ing. Ramiro Mauricio Chaira Delgado'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'vie-35',
@@ -605,7 +553,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'Una mirada hacia la investigación',
         expositores: ['Arq. M.Sc. Belen Alvarado Mollinedo'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'vie-36',
@@ -614,7 +562,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'La investigación como eje transversal del rediseño curricular: De la asignatura aislada al sistema de investigación formativa',
         expositores: ['M.Sc. Ing. Luz Mariela Choque Ayllón'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'vie-37',
@@ -623,7 +571,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'Propuesta de programa por competencias Metodología de la Investigación Arquitectónica y Proyectual Carrera de Arquitectura - FAADU - Universidad Mayor de San Andrés',
         expositores: ['MsC. Arq. Roberto Moreira Cordova'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'vie-38',
@@ -632,7 +580,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'INSTALACIONES ESPECIALES Y TECNOLOGIAS DE INNOVACIÓN',
         expositores: ['Ing. Ruben Juan Rocha Aguilar'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'vie-deb',
@@ -641,7 +589,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'Conclusiones y debate',
         expositores: [],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'vie-noc',
@@ -649,8 +597,8 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         horaFin: '21:00',
         titulo: 'RE ensamblar la teoria de la forma',
         expositores: ['Cátedras de Teoría y Morfología'],
-        lugar: 'Exposicion virtual GOOGLE MEET - FACEBOOK LIVE',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        lugar: 'Exposicion virtual FACEBOOK LIVE',
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       }
     ],
     coordinacion: {
@@ -673,7 +621,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'Inscripciones y registro',
         expositores: [],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'lun13-39',
@@ -682,7 +630,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'Hacia un arquitecto con competencias legales y éticas: Propuesta de incorporación de legislación y práctica profesional como materia transdisciplinar en la Carrera de Arquitectura de la UMSA',
         expositores: ['M.Sc. Ing. Luz Mariela Choque Ayllón'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'lun13-40',
@@ -691,7 +639,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'PRESENTACIÓN DE PROPUESTA DE DISEÑO MICRO CURRICULAR DE LA MATERIA: ANALISÍS ESTRÚCTURAL 1 ED-303',
         expositores: ['MSc. Ing. Nicanor Polo Cruz'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'lun13-41',
@@ -700,7 +648,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'PROPUESTA ACTUALIZADA DE PROGRAMA POR COMPETENCIAS, ASIGNATURA RAZONAMIENTO MATEMATICO',
         expositores: ['MsC. Arq. Roberto Moreira Cordova'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'lun13-42',
@@ -709,7 +657,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'PROPUESTA DE INCORPORACIÓN DE ASIGNATURA "PREPARACIÓN Y GESTIÓN DE PROYECTOS" Al regimen regular obligatorio de la malla regular de arquitectura',
         expositores: ['Mg. Victor Rolando Cansaya Cuchani'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'lun13-43',
@@ -718,7 +666,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'Propuesta de actualización de LA ENSEÑANZA DE LA MATEMÁTICA EN LA FORMACIÓN DE ARQUITECTOS',
         expositores: ['Arq. Jorge Alfredo de la Rocha Justiniano'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'lun13-44',
@@ -727,7 +675,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'PROPUESTA PARA QUE LA MATERIA DE PATRIMONIO CULTURAL Y NATURAL SE CONSTITUYA EN MATERIA REGULAR OBLIGATORIA DE LA CARRERA DE ARQUITECTURA DE LA FAADU- UMSA',
         expositores: ['Arq. M.Sc. Luis Raul C. Prado Rios'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'lun13-45',
@@ -736,7 +684,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'Asignatura Probabilidad y estadistica',
         expositores: ['PhD. Efrain Santalla Alejo'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'lun13-46',
@@ -745,7 +693,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'El sistema de admisión como filtro hidráulico: propuesta de rediseño para la calidad académica y la reducción del estrés en la FAADU-UMSA',
         expositores: ['Univ. Chura Mamani Daniel'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'lun13-tit',
@@ -754,7 +702,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'PROPUESTA DE PRIORIZACIÓN E INCENTIVACIÓN EN LA TITULACIÓN MEDIANTE TESIS y PROYECTOS DE GRADO DE MANERA INTERDISCIPLINAR y TRANSDISCIPLINAR.',
         expositores: ['Arq. M.Sc. Luis Raul C. Prado Rios'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'lun13-deb',
@@ -763,7 +711,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'Conclusiones y debate',
         expositores: [],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       },
       {
         id: 'lun13-cie',
@@ -772,7 +720,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         titulo: 'Cierre / refrigerio',
         expositores: [],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/FAADU.UMSA/'
+        linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       }
     ],
     coordinacion: {
@@ -800,7 +748,7 @@ const esElDiaDeHoy = (dia: DiaCronograma, fecha: Date): boolean => {
 }
 
 export default function Page() {
-  const [diaActual, setDiaActual] = useState<string>('viernes03')
+  const [diaActual, setDiaActual] = useState<string>('lunes')
   const [fechaSistema, setFechaSistema] = useState<Date | null>(null)
   const [hasInitialLoaded, setHasInitialLoaded] = useState(false)
 
@@ -811,9 +759,9 @@ export default function Page() {
   const [qrAmpliado, setQrAmpliado] = useState<string | null>(null)
 
   // Imagenes robustas fallbacks state
-  const [logoUmsaSrc, setLogoUmsaSrc] = useState('/logo-umsa.png')
-  const [logoFaaduSrc, setLogoFaaduSrc] = useState('/images-removebg-preview.png')
-  const [logoCrtpSrc, setLogoCrtpSrc] = useState('/logo-crtp.png')
+  const [logoUmsaSrc, setLogoUmsaSrc] = useState('/Logo_Umsa.png')
+  const [logoFaaduSrc, setLogoFaaduSrc] = useState('/faadu-logo.png')
+  const [logoCrtpSrc, setLogoCrtpSrc] = useState('//logo_crtp.png')
 
   // Tick del reloj en tiempo real
   useEffect(() => {
@@ -832,7 +780,7 @@ export default function Page() {
     if (hoyClave) {
       setDiaActual(hoyClave.diaClave)
     } else {
-      setDiaActual('viernes03') // Fallback al día de demostración
+      setDiaActual('lunes') // Fallback al primer día oficial
     }
     setHasInitialLoaded(true)
   }, [fechaSistema, hasInitialLoaded])
@@ -1236,23 +1184,32 @@ export default function Page() {
               )}
 
               {/* Enlace y QR */}
-              <div className="flex flex-col sm:flex-row items-center gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
-                <div className="flex-1 w-full text-center sm:text-left space-y-1">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200 w-full">
+                {/* Lado Izquierdo */}
+                <div className="flex flex-col items-center sm:items-start text-center sm:text-left space-y-1 min-w-0 flex-1">
                   <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider">CANAL OFICIAL</h4>
-                  <p className="text-xs text-slate-400 truncate max-w-[280px]">{modalConfig.linkFacebook}</p>
+                  <p className="text-xs text-slate-400 truncate w-full max-w-[280px] sm:max-w-[160px] md:max-w-[220px]" title={modalConfig.linkFacebook}>
+                    {modalConfig.linkFacebook}
+                  </p>
                 </div>
-                <div className="flex items-center gap-3 w-full sm:w-auto shrink-0 justify-center">
+
+                {/* Centro / Lado Derecho (Botón) */}
+                <div className="w-full sm:w-auto shrink-0 flex justify-center">
                   <a
                     href={modalConfig.linkFacebook}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 bg-[#1877F2] text-white px-4 py-2.5 rounded-lg font-bold text-xs hover:bg-blue-700 transition-colors shadow-md cursor-pointer whitespace-nowrap"
+                    className="inline-flex items-center justify-center gap-2 bg-[#1877F2] text-white px-4 py-2.5 rounded-lg font-bold text-xs hover:bg-blue-700 transition-colors shadow-md cursor-pointer whitespace-nowrap w-full sm:w-auto"
                   >
-                    <FacebookIcon className="w-4 h-4" />
+                    <FacebookIcon className="w-4 h-4 shrink-0" />
                     Ingresar a Facebook
                   </a>
+                </div>
+
+                {/* Extremo Derecho (Código QR) */}
+                <div className="shrink-0 flex justify-center">
                   <div
-                    className="bg-white p-1 rounded-md border border-slate-200 cursor-zoom-in hover:scale-105 transition-transform"
+                    className="bg-white p-1 rounded-xl border border-slate-200 cursor-zoom-in hover:scale-105 transition-transform shadow-xs flex items-center justify-center w-14 h-14"
                     title="Ampliar código QR"
                     onClick={() => setQrAmpliado(modalConfig.linkFacebook)}
                   >
@@ -1327,7 +1284,7 @@ export default function Page() {
             <img
               src={logoCrtpSrc}
               alt="Logo CRTP"
-              className="h-20 object-contain transition-all duration-300 hover:scale-105"
+              className="h-35 object-contain transition-all duration-300 hover:scale-105"
               onError={() => setLogoCrtpSrc('/logo_crtp.png')}
             />
           </div>
