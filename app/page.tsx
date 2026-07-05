@@ -761,7 +761,7 @@ export default function Page() {
   // Imagenes robustas fallbacks state
   const [logoUmsaSrc, setLogoUmsaSrc] = useState('/Logo_Umsa.png')
   const [logoFaaduSrc, setLogoFaaduSrc] = useState('/faadu-logo.png')
-  const [logoCrtpSrc, setLogoCrtpSrc] = useState('//logo_crtp.png')
+  const [logoCrtpSrc, setLogoCrtpSrc] = useState('/logo_crtp.png')
 
   // Tick del reloj en tiempo real
   useEffect(() => {
@@ -1284,7 +1284,7 @@ export default function Page() {
             <img
               src={logoCrtpSrc}
               alt="Logo CRTP"
-              className="h-35 object-contain transition-all duration-300 hover:scale-105"
+              className="h-45 object-contain transition-all duration-300 hover:scale-105"
               onError={() => setLogoCrtpSrc('/logo_crtp.png')}
             />
           </div>
