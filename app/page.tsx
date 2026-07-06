@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
-import { Calendar, Clock, MapPin, X, Users, Award, Shield, CheckCircle, ArrowRight } from 'lucide-react'
+import { Calendar, Clock, MapPin, X, Users, Award, Shield, CheckCircle, ArrowRight, FileText } from 'lucide-react'
 
 // Icono personalizado de Facebook para evitar problemas de versión en lucide-react
 function FacebookIcon({ className }: { className?: string }) {
@@ -732,6 +732,9 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
   }
 }
 
+// Enlace al documento de la comisión (puedes cambiar esta URL por el enlace real de Drive, PDF, etc.)
+const LINK_DOCUMENTO_COMISION = ' https://faadu.umsa.bo/carreras/arquitectura/comision-de-rediseno-curricular/'
+
 // Convertir hora "HH:MM" a minutos de día
 const convertirHoraAMinutos = (hora: string): number => {
   const [h, m] = hora.split(':').map(Number)
@@ -875,24 +878,37 @@ export default function Page() {
             <p className="text-sm text-amber-600 font-medium italic mt-1">
               Hacia la nueva Currícula de la Carrera de Arquitectura por Competencias
             </p>
-            {fechaSistema && (
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-xs font-medium text-slate-600 mt-2">
-                <Clock className="w-3.5 h-3.5 text-slate-400 animate-pulse" />
-                <span>
-                  Hoy:{' '}
-                  <span className="font-semibold capitalize">
-                    {fechaSistema.toLocaleDateString('es-ES', {
-                      weekday: 'long',
-                      day: 'numeric',
-                      month: 'long',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                      second: '2-digit'
-                    })}
+            <div className="flex flex-wrap items-center justify-center gap-2 mt-2">
+              {fechaSistema && (
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-xs font-medium text-slate-600">
+                  <Clock className="w-3.5 h-3.5 text-slate-400 animate-pulse" />
+                  <span>
+                    Hoy:{' '}
+                    <span className="font-semibold capitalize">
+                      {fechaSistema.toLocaleDateString('es-ES', {
+                        weekday: 'long',
+                        day: 'numeric',
+                        month: 'long',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                      })}
+                    </span>
                   </span>
-                </span>
-              </div>
-            )}
+                </div>
+              )}
+
+              <a
+                href={LINK_DOCUMENTO_COMISION}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 hover:bg-amber-200 text-xs font-bold text-amber-800 border border-amber-200 transition-colors shadow-xs cursor-pointer"
+                title="Abrir Documento de Comisión"
+              >
+                <FileText className="w-3.5 h-3.5 text-amber-600" />
+                <span>Documento de Comisión</span>
+              </a>
+            </div>
           </div>
 
           {/* Columna Derecha: Imagen FAADU */}
@@ -947,11 +963,10 @@ export default function Page() {
               <button
                 key={dia.diaClave}
                 onClick={() => setDiaActual(dia.diaClave)}
-                className={`flex-1 min-w-[140px] px-4 py-3 rounded-lg text-xs md:text-sm font-bold tracking-tight transition-all duration-200 cursor-pointer ${
-                  isSelected
+                className={`flex-1 min-w-[140px] px-4 py-3 rounded-lg text-xs md:text-sm font-bold tracking-tight transition-all duration-200 cursor-pointer ${isSelected
                     ? 'bg-amber-500 text-white shadow-md scale-[1.02]'
                     : 'bg-white hover:bg-slate-50 text-slate-600 border border-slate-200 hover:border-amber-400'
-                } relative`}
+                  } relative`}
               >
                 {dia.etiqueta}
                 {esHoy && (
@@ -982,13 +997,12 @@ export default function Page() {
             return (
               <div
                 key={evento.id}
-                className={`relative bg-white rounded-xl border p-5 md:p-6 transition-all duration-300 ${
-                  esEnVivo
+                className={`relative bg-white rounded-xl border p-5 md:p-6 transition-all duration-300 ${esEnVivo
                     ? 'border-amber-500 ring-2 ring-amber-500/20 bg-amber-50/20 shadow-md scale-[1.01]'
                     : esPasado
-                    ? 'border-slate-200 bg-slate-50/50 opacity-75'
-                    : 'border-slate-200 hover:shadow-md hover:border-slate-300'
-                }`}
+                      ? 'border-slate-200 bg-slate-50/50 opacity-75'
+                      : 'border-slate-200 hover:shadow-md hover:border-slate-300'
+                  }`}
               >
                 {/* Badge EN VIVO */}
                 {esEnVivo && tieneExpositores && (
@@ -1051,11 +1065,10 @@ export default function Page() {
                             href={esPasado ? undefined : evento.linkFacebook}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={`px-4 py-2 rounded-md font-bold text-xs tracking-wide transition-all w-full md:w-auto text-center ${
-                              esPasado
+                            className={`px-4 py-2 rounded-md font-bold text-xs tracking-wide transition-all w-full md:w-auto text-center ${esPasado
                                 ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
                                 : 'bg-slate-900 text-white hover:bg-slate-800 shadow-sm cursor-pointer'
-                            }`}
+                              }`}
                           >
                             {esPasado ? 'Finalizado' : 'Entrar'}
                           </a>
@@ -1293,6 +1306,20 @@ export default function Page() {
           © 2026 Facultad de Arquitectura, Artes, Diseño y Urbanismo (FAADU) - UMSA. Todos los derechos reservados.
         </div>
       </footer>
+
+      {/* Botón flotante para el Documento de Comisión */}
+      <div className="fixed bottom-6 right-6 z-40">
+        <a
+          href={LINK_DOCUMENTO_COMISION}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white px-4 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 font-bold text-xs md:text-sm border border-amber-400 group cursor-pointer"
+          title="Ver Documento de Comisión"
+        >
+          <FileText className="w-4 h-4 md:w-5 md:h-5 animate-pulse group-hover:scale-110 transition-transform" />
+          <span>Documento de Comisión</span>
+        </a>
+      </div>
     </main>
   )
 }
