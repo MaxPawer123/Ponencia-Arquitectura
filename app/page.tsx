@@ -257,8 +257,8 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         horaInicio: '20:00',
         horaFin: '21:00',
         titulo: 'EL SISTEMA DE LAS PRÁCTICAS Hacia una nueva educación en Arquitectura. FAADU UMSA',
-        expositores: ['Comisión de Prácticas Académicas'],
-        lugar: '',
+        expositores: ['Arq. Carlos Villagómez'],
+        lugar: 'Exposicion virtual Facebook Live - FAADU UMSA',
         linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       }
     ],
@@ -370,7 +370,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         horaInicio: '20:00',
         horaFin: '21:00',
         titulo: 'Curricula flexible y la maestria terminal',
-        expositores: ['Comisión de Postgrado FAADU'],
+        expositores: ['MSc. Arq. Mario Ibañez Ibañez'],
         lugar: 'Exposicion virtual FACEBOOK LIVE',
         linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       }
@@ -401,7 +401,7 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         id: 'jue-23',
         horaInicio: '09:30',
         horaFin: '10:00',
-        titulo: 'PROYECTOS URBANOS ESTRATÉGICOS PARA LA TRANSFORMACIÓN TERRITORIAL DE LA PAZ 2026–2031: HACIA UN MODELO DE CIUDAD RESILIENTE, POLICÉNTRICA Y SOSTENIBLE',
+        titulo: 'PROYECTOS URBANOS ESTRATÉGICOS PARA LA TRANSFORMACIÓN TERRITORIAL DE LA PAZ 2026 - 2031: HACIA UN MODELO DE CIUDAD RESILIENTE, POLICÉNTRICA Y SOSTENIBLE',
         expositores: ['Univ. Suseth Camila Mejía Arroyo', 'Univ. José Manuel Peralta Villanueva', 'Docente: Mg Sc.Arq. José María L. Vargas Aliaga'],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
         linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
@@ -483,8 +483,8 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         horaInicio: '20:00',
         horaFin: '21:00',
         titulo: 'Inteligencia artificial aplicada a la carrera de arquitectura',
-        expositores: ['Especialistas en Tecnología y Diseño Computacional'],
-        lugar: 'Exposicion virtual FACEBOOK LIVE',
+        expositores: ['MSc. Lic. Sergio Álvarez Molina'],
+        lugar: 'Google Meet - Facebook Live - FAADU UMSA',
         linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       }
     ],
@@ -596,8 +596,8 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
         horaInicio: '20:00',
         horaFin: '21:00',
         titulo: 'RE ensamblar la teoria de la forma',
-        expositores: ['Cátedras de Teoría y Morfología'],
-        lugar: 'Exposicion virtual FACEBOOK LIVE',
+        expositores: ['Arq. Augusto Yépez'],
+        lugar: 'Google Meet - Facebook Live - FAADU UMSA',
         linkFacebook: 'https://www.facebook.com/profile.php?id=100047802766633'
       }
     ],
@@ -964,8 +964,8 @@ export default function Page() {
                 key={dia.diaClave}
                 onClick={() => setDiaActual(dia.diaClave)}
                 className={`flex-1 min-w-[140px] px-4 py-3 rounded-lg text-xs md:text-sm font-bold tracking-tight transition-all duration-200 cursor-pointer ${isSelected
-                    ? 'bg-amber-500 text-white shadow-md scale-[1.02]'
-                    : 'bg-white hover:bg-slate-50 text-slate-600 border border-slate-200 hover:border-amber-400'
+                  ? 'bg-amber-500 text-white shadow-md scale-[1.02]'
+                  : 'bg-white hover:bg-slate-50 text-slate-600 border border-slate-200 hover:border-amber-400'
                   } relative`}
               >
                 {dia.etiqueta}
@@ -998,10 +998,10 @@ export default function Page() {
               <div
                 key={evento.id}
                 className={`relative bg-white rounded-xl border p-5 md:p-6 transition-all duration-300 ${esEnVivo
-                    ? 'border-amber-500 ring-2 ring-amber-500/20 bg-amber-50/20 shadow-md scale-[1.01]'
-                    : esPasado
-                      ? 'border-slate-200 bg-slate-50/50 opacity-75'
-                      : 'border-slate-200 hover:shadow-md hover:border-slate-300'
+                  ? 'border-amber-500 ring-2 ring-amber-500/20 bg-amber-50/20 shadow-md scale-[1.01]'
+                  : esPasado
+                    ? 'border-slate-200 bg-slate-50/50 opacity-75'
+                    : 'border-slate-200 hover:shadow-md hover:border-slate-300'
                   }`}
               >
                 {/* Badge EN VIVO */}
@@ -1066,8 +1066,8 @@ export default function Page() {
                             target="_blank"
                             rel="noopener noreferrer"
                             className={`px-4 py-2 rounded-md font-bold text-xs tracking-wide transition-all w-full md:w-auto text-center ${esPasado
-                                ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
-                                : 'bg-slate-900 text-white hover:bg-slate-800 shadow-sm cursor-pointer'
+                              ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                              : 'bg-slate-900 text-white hover:bg-slate-800 shadow-sm cursor-pointer'
                               }`}
                           >
                             {esPasado ? 'Finalizado' : 'Entrar'}
