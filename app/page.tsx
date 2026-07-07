@@ -906,7 +906,7 @@ export default function Page() {
                 title="Abrir Documento de Comisión"
               >
                 <FileText className="w-3.5 h-3.5 text-amber-600" />
-                <span>Documento de Comisión</span>
+                <span>Comisión de Rediseño Curricular</span>
               </a>
             </div>
           </div>
@@ -1317,7 +1317,7 @@ export default function Page() {
           title="Ver Documento de Comisión"
         >
           <FileText className="w-4 h-4 md:w-5 md:h-5 animate-pulse group-hover:scale-110 transition-transform" />
-          <span>Documento de Comisión</span>
+          <span>Comisión de Rediseño Curricular</span>
         </a>
       </div>
     </main>
