@@ -715,19 +715,19 @@ const CRONOGRAMA_OFICIAL: Record<string, DiaCronograma> = {
       },
       {
         id: 'lun13-cie',
-        horaInicio: '20:00',
-        horaFin: '22:00',
+        horaInicio: '14:30',
+        horaFin: '15:00',
         titulo: 'Cierre / refrigerio',
         expositores: [],
         lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/share/17hytBFRf1/'
+        linkFacebook: 'https://www.facebook.com/100047802766633/videos/1737173773946746'
       }
     ],
     coordinacion: {
-      moderador: 'M.SC. ARQ. LUIS RAUL C. PRADO RIOS',
-      secretarioActas: 'MSC. ARQ. ZAZANDA SALCEDO GUTIERREZ',
-      coordinadorCRTP: 'ARQ. HUMBERTO CANDIA',
-      responsableAsistencia: 'UNIV. ALEXANDER CALLISAYA / UNIV. JUAN RENGEL'
+      moderador: 'M.SC. ARQ. HEIDI MENDOZA BARRAU',
+      secretarioActas: 'MSC. ARQ. RICARDO ALFARO',
+      coordinadorCRTP: 'ARQ. FABIOLA ZABALLA',
+      responsableAsistencia: 'UNIV. ALEXANDER CALLISAYA / UNIV. JUAN RANGEL'
     }
   }
 }
