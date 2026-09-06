@@ -118,25 +118,131 @@ const DATOS_INICIALES: DiaEvento[] = [
       secretarioActas: 'ARQ. DANILO RAZNATOVIC',
       coordinadorCRTP: 'ING. GLORIA ISLAS',
       responsableAsistencia: 'UNIV. ITARAY GUTIERREZ / UNIV. FERNANDA TORRES'
-    },
-    ponencias: []
+    }
   },
-  {
-    id: 'lunes13',
+  lunes13: {
     diaClave: 'lunes13',
-    fecha: 'Lunes 13 de Julio',
+    etiqueta: 'Lunes 13 de Julio',
     enfoque: 'PROPUESTAS DE MATERIAS CURRICULARES',
-    moderador: 'M.SC. ARQ. LUIS RAUL C. PRADO RIOS',
-    diaFecha: { year: 2026, month: 6, date: 13 },
+    fecha: { year: 2026, month: 6, date: 13 },
+    eventos: [
+      {
+        id: 'lun13-reg',
+        horaInicio: '09:00',
+        horaFin: '09:30',
+        titulo: 'Inscripciones y registro',
+        expositores: [],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: ' https://www.facebook.com/share/1JvVtTY2KM/'
+      },
+      {
+        id: 'lun13-39',
+        horaInicio: '09:30',
+        horaFin: '10:00',
+        titulo: 'Hacia un arquitecto con competencias legales y éticas: Propuesta de incorporación de legislación y práctica profesional como materia transdisciplinar en la Carrera de Arquitectura de la UMSA',
+        expositores: ['M.Sc. Ing. Luz Mariela Choque Ayllón'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/share/1JvVtTY2KM/'
+      },
+      {
+        id: 'lun13-40',
+        horaInicio: '10:00',
+        horaFin: '10:30',
+        titulo: 'PRESENTACIÓN DE PROPUESTA DE DISEÑO MICRO CURRICULAR DE LA MATERIA: ANALISÍS ESTRÚCTURAL 1 ED-303',
+        expositores: ['MSc. Ing. Nicanor Polo Cruz'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/share/1JvVtTY2KM/'
+      },
+      {
+        id: 'lun13-41',
+        horaInicio: '10:30',
+        horaFin: '11:00',
+        titulo: 'PROPUESTA ACTUALIZADA DE PROGRAMA POR COMPETENCIAS, ASIGNATURA RAZONAMIENTO MATEMATICO',
+        expositores: ['MsC. Arq. Roberto Moreira Cordova'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/share/1JvVtTY2KM/'
+      },
+      {
+        id: 'lun13-42',
+        horaInicio: '11:00',
+        horaFin: '11:30',
+        titulo: 'PROPUESTA DE INCORPORACIÓN DE ASIGNATURA "PREPARACIÓN Y GESTIÓN DE PROYECTOS" Al regimen regular obligatorio de la malla regular de arquitectura',
+        expositores: ['Mg. Victor Rolando Cansaya Cuchani'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/share/1JvVtTY2KM/'
+      },
+      {
+        id: 'lun13-43',
+        horaInicio: '11:30',
+        horaFin: '12:00',
+        titulo: 'Propuesta de actualización de LA ENSEÑANZA DE LA MATEMÁTICA EN LA FORMACIÓN DE ARQUITECTOS',
+        expositores: ['Arq. Jorge Alfredo de la Rocha Justiniano'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/share/1JvVtTY2KM/'
+      },
+      {
+        id: 'lun13-44',
+        horaInicio: '12:00',
+        horaFin: '12:30',
+        titulo: 'PROPUESTA PARA QUE LA MATERIA DE PATRIMONIO CULTURAL Y NATURAL SE CONSTITUYA EN MATERIA REGULAR OBLIGATORIA DE LA CARRERA DE ARQUITECTURA DE LA FAADU- UMSA',
+        expositores: ['Arq. M.Sc. Luis Raul C. Prado Rios'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/share/1JvVtTY2KM/'
+      },
+      {
+        id: 'lun13-45',
+        horaInicio: '12:30',
+        horaFin: '13:00',
+        titulo: 'Asignatura Probabilidad y estadistica',
+        expositores: ['PhD. Efrain Santalla Alejo'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/share/1JvVtTY2KM/'
+      },
+      {
+        id: 'lun13-46',
+        horaInicio: '13:00',
+        horaFin: '13:30',
+        titulo: 'El sistema de admisión como filtro hidráulico: propuesta de rediseño para la calidad académica y la reducción del estrés en la FAADU-UMSA',
+        expositores: ['Univ. Chura Mamani Daniel'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/share/1JvVtTY2KM/'
+      },
+      {
+        id: 'lun13-tit',
+        horaInicio: '13:30',
+        horaFin: '14:00',
+        titulo: 'PROPUESTA DE PRIORIZACIÓN E INCENTIVACIÓN EN LA TITULACIÓN MEDIANTE TESIS y PROYECTOS DE GRADO DE MANERA INTERDISCIPLINAR y TRANSDISCIPLINAR.',
+        expositores: ['Arq. M.Sc. Luis Raul C. Prado Rios'],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/share/1JvVtTY2KM/'
+      },
+      {
+        id: 'lun13-deb',
+        horaInicio: '14:00',
+        horaFin: '14:30',
+        titulo: 'Conclusiones y debate',
+        expositores: [],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/share/1JvVtTY2KM/'
+      },
+      {
+        id: 'lun13-cie',
+        horaInicio: '20:00',
+        horaFin: '22:00',
+        titulo: 'Cierre / refrigerio',
+        expositores: [],
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        linkFacebook: 'https://www.facebook.com/share/17hytBFRf1/'
+      }
+    ],
     coordinacion: {
       moderador: 'M.SC. ARQ. LUIS RAUL C. PRADO RIOS',
       secretarioActas: 'MSC. ARQ. ZAZANDA SALCEDO GUTIERREZ',
       coordinadorCRTP: 'ARQ. HUMBERTO CANDIA',
       responsableAsistencia: 'UNIV. ALEXANDER CALLISAYA / UNIV. JUAN RENGEL'
-    },
-    ponencias: []
+    }
   }
-]
+}
 
 // Enlace al documento de la comision
 const LINK_DOCUMENTO_COMISION = 'https://faadu.umsa.bo/carreras/arquitectura/comision-de-rediseno-curricular/'
