@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, useEffect } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
 import { Calendar, Clock, MapPin, X, Users, Plus, FileText } from 'lucide-react'
