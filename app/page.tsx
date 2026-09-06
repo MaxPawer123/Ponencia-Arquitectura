@@ -118,131 +118,158 @@ const DATOS_INICIALES: DiaEvento[] = [
       secretarioActas: 'ARQ. DANILO RAZNATOVIC',
       coordinadorCRTP: 'ING. GLORIA ISLAS',
       responsableAsistencia: 'UNIV. ITARAY GUTIERREZ / UNIV. FERNANDA TORRES'
-    }
+    },
+    ponencias: []
   },
-  lunes13: {
+  {
+    id: 'lunes13',
     diaClave: 'lunes13',
-    etiqueta: 'Lunes 13 de Julio',
+    fecha: 'Lunes 13 de Julio',
     enfoque: 'PROPUESTAS DE MATERIAS CURRICULARES',
-    fecha: { year: 2026, month: 6, date: 13 },
-    eventos: [
-      {
-        id: 'lun13-reg',
-        horaInicio: '09:00',
-        horaFin: '09:30',
-        titulo: 'Inscripciones y registro',
-        expositores: [],
-        lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: ' https://www.facebook.com/share/1JvVtTY2KM/'
-      },
-      {
-        id: 'lun13-39',
-        horaInicio: '09:30',
-        horaFin: '10:00',
-        titulo: 'Hacia un arquitecto con competencias legales y éticas: Propuesta de incorporación de legislación y práctica profesional como materia transdisciplinar en la Carrera de Arquitectura de la UMSA',
-        expositores: ['M.Sc. Ing. Luz Mariela Choque Ayllón'],
-        lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/share/1JvVtTY2KM/'
-      },
-      {
-        id: 'lun13-40',
-        horaInicio: '10:00',
-        horaFin: '10:30',
-        titulo: 'PRESENTACIÓN DE PROPUESTA DE DISEÑO MICRO CURRICULAR DE LA MATERIA: ANALISÍS ESTRÚCTURAL 1 ED-303',
-        expositores: ['MSc. Ing. Nicanor Polo Cruz'],
-        lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/share/1JvVtTY2KM/'
-      },
-      {
-        id: 'lun13-41',
-        horaInicio: '10:30',
-        horaFin: '11:00',
-        titulo: 'PROPUESTA ACTUALIZADA DE PROGRAMA POR COMPETENCIAS, ASIGNATURA RAZONAMIENTO MATEMATICO',
-        expositores: ['MsC. Arq. Roberto Moreira Cordova'],
-        lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/share/1JvVtTY2KM/'
-      },
-      {
-        id: 'lun13-42',
-        horaInicio: '11:00',
-        horaFin: '11:30',
-        titulo: 'PROPUESTA DE INCORPORACIÓN DE ASIGNATURA "PREPARACIÓN Y GESTIÓN DE PROYECTOS" Al regimen regular obligatorio de la malla regular de arquitectura',
-        expositores: ['Mg. Victor Rolando Cansaya Cuchani'],
-        lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/share/1JvVtTY2KM/'
-      },
-      {
-        id: 'lun13-43',
-        horaInicio: '11:30',
-        horaFin: '12:00',
-        titulo: 'Propuesta de actualización de LA ENSEÑANZA DE LA MATEMÁTICA EN LA FORMACIÓN DE ARQUITECTOS',
-        expositores: ['Arq. Jorge Alfredo de la Rocha Justiniano'],
-        lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/share/1JvVtTY2KM/'
-      },
-      {
-        id: 'lun13-44',
-        horaInicio: '12:00',
-        horaFin: '12:30',
-        titulo: 'PROPUESTA PARA QUE LA MATERIA DE PATRIMONIO CULTURAL Y NATURAL SE CONSTITUYA EN MATERIA REGULAR OBLIGATORIA DE LA CARRERA DE ARQUITECTURA DE LA FAADU- UMSA',
-        expositores: ['Arq. M.Sc. Luis Raul C. Prado Rios'],
-        lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/share/1JvVtTY2KM/'
-      },
-      {
-        id: 'lun13-45',
-        horaInicio: '12:30',
-        horaFin: '13:00',
-        titulo: 'Asignatura Probabilidad y estadistica',
-        expositores: ['PhD. Efrain Santalla Alejo'],
-        lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/share/1JvVtTY2KM/'
-      },
-      {
-        id: 'lun13-46',
-        horaInicio: '13:00',
-        horaFin: '13:30',
-        titulo: 'El sistema de admisión como filtro hidráulico: propuesta de rediseño para la calidad académica y la reducción del estrés en la FAADU-UMSA',
-        expositores: ['Univ. Chura Mamani Daniel'],
-        lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/share/1JvVtTY2KM/'
-      },
-      {
-        id: 'lun13-tit',
-        horaInicio: '13:30',
-        horaFin: '14:00',
-        titulo: 'PROPUESTA DE PRIORIZACIÓN E INCENTIVACIÓN EN LA TITULACIÓN MEDIANTE TESIS y PROYECTOS DE GRADO DE MANERA INTERDISCIPLINAR y TRANSDISCIPLINAR.',
-        expositores: ['Arq. M.Sc. Luis Raul C. Prado Rios'],
-        lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/share/1JvVtTY2KM/'
-      },
-      {
-        id: 'lun13-deb',
-        horaInicio: '14:00',
-        horaFin: '14:30',
-        titulo: 'Conclusiones y debate',
-        expositores: [],
-        lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/share/1JvVtTY2KM/'
-      },
-      {
-        id: 'lun13-cie',
-        horaInicio: '20:00',
-        horaFin: '22:00',
-        titulo: 'Cierre / refrigerio',
-        expositores: [],
-        lugar: 'Auditorio Principal / Capilla de la Facultad',
-        linkFacebook: 'https://www.facebook.com/share/17hytBFRf1/'
-      }
-    ],
+    moderador: 'M.SC. ARQ. LUIS RAUL C. PRADO RIOS',
+    diaFecha: { year: 2026, month: 6, date: 13 },
     coordinacion: {
       moderador: 'M.SC. ARQ. LUIS RAUL C. PRADO RIOS',
       secretarioActas: 'MSC. ARQ. ZAZANDA SALCEDO GUTIERREZ',
       coordinadorCRTP: 'ARQ. HUMBERTO CANDIA',
       responsableAsistencia: 'UNIV. ALEXANDER CALLISAYA / UNIV. JUAN RENGEL'
-    }
+    },
+    ponencias: [
+      {
+        id: 'lun13-reg',
+        titulo: 'Inscripciones y registro',
+        ponente: '',
+        hora: '09:00 - 09:30',
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        horaInicio: '09:00',
+        horaFin: '09:30',
+        expositores: [],
+        linkFacebook: 'https://www.facebook.com/share/1JvVtTY2KM/'
+      },
+      {
+        id: 'lun13-39',
+        titulo: 'Hacia un arquitecto con competencias legales y éticas: Propuesta de incorporación de legislación y práctica profesional como materia transdisciplinar en la Carrera de Arquitectura de la UMSA',
+        ponente: 'M.Sc. Ing. Luz Mariela Choque Ayllón',
+        hora: '09:30 - 10:00',
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        horaInicio: '09:30',
+        horaFin: '10:00',
+        expositores: ['M.Sc. Ing. Luz Mariela Choque Ayllón'],
+        linkFacebook: 'https://www.facebook.com/share/1JvVtTY2KM/'
+      },
+      {
+        id: 'lun13-40',
+        titulo: 'PRESENTACIÓN DE PROPUESTA DE DISEÑO MICRO CURRICULAR DE LA MATERIA: ANALISÍS ESTRÚCTURAL 1 ED-303',
+        ponente: 'MSc. Ing. Nicanor Polo Cruz',
+        hora: '10:00 - 10:30',
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        horaInicio: '10:00',
+        horaFin: '10:30',
+        expositores: ['MSc. Ing. Nicanor Polo Cruz'],
+        linkFacebook: 'https://www.facebook.com/share/1JvVtTY2KM/'
+      },
+      {
+        id: 'lun13-41',
+        titulo: 'PROPUESTA ACTUALIZADA DE PROGRAMA POR COMPETENCIAS, ASIGNATURA RAZONAMIENTO MATEMATICO',
+        ponente: 'MsC. Arq. Roberto Moreira Cordova',
+        hora: '10:30 - 11:00',
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        horaInicio: '10:30',
+        horaFin: '11:00',
+        expositores: ['MsC. Arq. Roberto Moreira Cordova'],
+        linkFacebook: 'https://www.facebook.com/share/1JvVtTY2KM/'
+      },
+      {
+        id: 'lun13-42',
+        titulo: 'PROPUESTA DE INCORPORACIÓN DE ASIGNATURA "PREPARACIÓN Y GESTIÓN DE PROYECTOS" Al regimen regular obligatorio de la malla regular de arquitectura',
+        ponente: 'Mg. Victor Rolando Cansaya Cuchani',
+        hora: '11:00 - 11:30',
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        horaInicio: '11:00',
+        horaFin: '11:30',
+        expositores: ['Mg. Victor Rolando Cansaya Cuchani'],
+        linkFacebook: 'https://www.facebook.com/share/1JvVtTY2KM/'
+      },
+      {
+        id: 'lun13-43',
+        titulo: 'Propuesta de actualización de LA ENSEÑANZA DE LA MATEMÁTICA EN LA FORMACIÓN DE ARQUITECTOS',
+        ponente: 'Arq. Jorge Alfredo de la Rocha Justiniano',
+        hora: '11:30 - 12:00',
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        horaInicio: '11:30',
+        horaFin: '12:00',
+        expositores: ['Arq. Jorge Alfredo de la Rocha Justiniano'],
+        linkFacebook: 'https://www.facebook.com/share/1JvVtTY2KM/'
+      },
+      {
+        id: 'lun13-44',
+        titulo: 'PROPUESTA PARA QUE LA MATERIA DE PATRIMONIO CULTURAL Y NATURAL SE CONSTITUYA EN MATERIA REGULAR OBLIGATORIA DE LA CARRERA DE ARQUITECTURA DE LA FAADU- UMSA',
+        ponente: 'Arq. M.Sc. Luis Raul C. Prado Rios',
+        hora: '12:00 - 12:30',
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        horaInicio: '12:00',
+        horaFin: '12:30',
+        expositores: ['Arq. M.Sc. Luis Raul C. Prado Rios'],
+        linkFacebook: 'https://www.facebook.com/share/1JvVtTY2KM/'
+      },
+      {
+        id: 'lun13-45',
+        titulo: 'Asignatura Probabilidad y estadistica',
+        ponente: 'PhD. Efrain Santalla Alejo',
+        hora: '12:30 - 13:00',
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        horaInicio: '12:30',
+        horaFin: '13:00',
+        expositores: ['PhD. Efrain Santalla Alejo'],
+        linkFacebook: 'https://www.facebook.com/share/1JvVtTY2KM/'
+      },
+      {
+        id: 'lun13-46',
+        titulo: 'El sistema de admisión como filtro hidráulico: propuesta de rediseño para la calidad académica y la reducción del estrés en la FAADU-UMSA',
+        ponente: 'Univ. Chura Mamani Daniel',
+        hora: '13:00 - 13:30',
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        horaInicio: '13:00',
+        horaFin: '13:30',
+        expositores: ['Univ. Chura Mamani Daniel'],
+        linkFacebook: 'https://www.facebook.com/share/1JvVtTY2KM/'
+      },
+      {
+        id: 'lun13-tit',
+        titulo: ' DE PRIORIZACIÓN E INCENTIVACIÓN EN LA TITULACIÓN MEDIANTE TESIS y PROYECTOS DE GRADO DE MANERA INTERDISCIPLINAR y TRANSDISCIPLINAR.',
+        ponente: 'Arq. M.Sc. Luis Raul C. Prado Rios',
+        hora: '13:30 - 14:00',
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        horaInicio: '13:30',
+        horaFin: '14:00',
+        expositores: ['Arq. M.Sc. Luis Raul C. Prado Rios'],
+        linkFacebook: 'https://www.facebook.com/share/1JvVtTY2KM/'
+      },
+      {
+        id: 'lun13-deb',
+        titulo: 'Conclusiones y debate',
+        ponente: '',
+        hora: '14:00 - 14:30',
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        horaInicio: '14:00',
+        horaFin: '14:30',
+        expositores: [],
+        linkFacebook: 'https://www.facebook.com/share/1JvVtTY2KM/'
+      },
+      {
+        id: 'lun13-cie',
+        titulo: 'Cierre / refrigerio',
+        ponente: '',
+        hora: '20:00 - 22:00',
+        lugar: 'Auditorio Principal / Capilla de la Facultad',
+        horaInicio: '20:00',
+        horaFin: '22:00',
+        expositores: [],
+        linkFacebook: 'https://www.facebook.com/share/17hytBFRf1/'
+      }
+    ]
   }
-}
+]
 
 // Enlace al documento de la comision
 const LINK_DOCUMENTO_COMISION = 'https://faadu.umsa.bo/carreras/arquitectura/comision-de-rediseno-curricular/'
@@ -529,145 +556,145 @@ export default function Page() {
         {/* Panel de Administracion — siempre visible */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white border border-slate-200 rounded-2xl p-6 md:p-8 shadow-sm">
 
-            {/* Formulario A: Crear Dia */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
-                <Calendar className="w-5 h-5 text-amber-500" />
-                <h3 className="font-extrabold text-sm md:text-base tracking-tight text-slate-800">
-                  AGREGAR DIA DE EVENTO
-                </h3>
-              </div>
-              <form id="form-agregar-dia" onSubmit={handleAgregarDia} className="space-y-3">
-                <div>
-                  <label htmlFor="input-dia-fecha" className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
-                    Fecha / Nombre del Dia *
-                  </label>
-                  <input
-                    id="input-dia-fecha"
-                    type="text"
-                    required
-                    placeholder="Ej: Martes 14 de Julio"
-                    value={formDia.fecha}
-                    onChange={(e) => setFormDia((prev) => ({ ...prev, fecha: e.target.value }))}
-                    className="w-full px-3 py-2.5 rounded-lg border border-slate-200 text-sm font-medium text-slate-800 bg-slate-50 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all placeholder:text-slate-400"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="input-dia-moderador" className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
-                    Moderador
-                  </label>
-                  <input
-                    id="input-dia-moderador"
-                    type="text"
-                    placeholder="Nombre completo del moderador"
-                    value={formDia.moderador}
-                    onChange={(e) => setFormDia((prev) => ({ ...prev, moderador: e.target.value }))}
-                    className="w-full px-3 py-2.5 rounded-lg border border-slate-200 text-sm font-medium text-slate-800 bg-slate-50 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all placeholder:text-slate-400"
-                  />
-                </div>
-                <button
-                  id="btn-submit-agregar-dia"
-                  type="submit"
-                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm tracking-wide transition-all shadow-sm cursor-pointer"
-                >
-                  <Plus className="w-4 h-4" />
-                  Agregar Dia
-                </button>
-              </form>
+          {/* Formulario A: Crear Dia */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
+              <Calendar className="w-5 h-5 text-amber-500" />
+              <h3 className="font-extrabold text-sm md:text-base tracking-tight text-slate-800">
+                AGREGAR DIA DE EVENTO
+              </h3>
             </div>
+            <form id="form-agregar-dia" onSubmit={handleAgregarDia} className="space-y-3">
+              <div>
+                <label htmlFor="input-dia-fecha" className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
+                  Fecha / Nombre del Dia *
+                </label>
+                <input
+                  id="input-dia-fecha"
+                  type="text"
+                  required
+                  placeholder="Ej: Martes 14 de Julio"
+                  value={formDia.fecha}
+                  onChange={(e) => setFormDia((prev) => ({ ...prev, fecha: e.target.value }))}
+                  className="w-full px-3 py-2.5 rounded-lg border border-slate-200 text-sm font-medium text-slate-800 bg-slate-50 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all placeholder:text-slate-400"
+                />
+              </div>
+              <div>
+                <label htmlFor="input-dia-moderador" className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
+                  Moderador
+                </label>
+                <input
+                  id="input-dia-moderador"
+                  type="text"
+                  placeholder="Nombre completo del moderador"
+                  value={formDia.moderador}
+                  onChange={(e) => setFormDia((prev) => ({ ...prev, moderador: e.target.value }))}
+                  className="w-full px-3 py-2.5 rounded-lg border border-slate-200 text-sm font-medium text-slate-800 bg-slate-50 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all placeholder:text-slate-400"
+                />
+              </div>
+              <button
+                id="btn-submit-agregar-dia"
+                type="submit"
+                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm tracking-wide transition-all shadow-sm cursor-pointer"
+              >
+                <Plus className="w-4 h-4" />
+                Agregar Dia
+              </button>
+            </form>
+          </div>
 
-            {/* Formulario B: Crear Ponencia */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
-                <Users className="w-5 h-5 text-amber-500" />
-                <h3 className="font-extrabold text-sm md:text-base tracking-tight text-slate-800">
-                  AGREGAR PONENCIA
-                </h3>
-              </div>
-              <form id="form-agregar-ponencia" onSubmit={handleAgregarPonencia} className="space-y-3">
-                <div>
-                  <label htmlFor="select-ponencia-dia" className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
-                    Asignar al Dia *
-                  </label>
-                  <select
-                    id="select-ponencia-dia"
-                    required
-                    value={formPonencia.diaId}
-                    onChange={(e) => setFormPonencia((prev) => ({ ...prev, diaId: e.target.value }))}
-                    className="w-full px-3 py-2.5 rounded-lg border border-slate-200 text-sm font-medium text-slate-800 bg-slate-50 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all cursor-pointer"
-                  >
-                    {dias.map((dia) => (
-                      <option key={dia.id} value={dia.id}>
-                        {dia.fecha}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label htmlFor="input-ponencia-titulo" className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
-                    Titulo *
-                  </label>
-                  <input
-                    id="input-ponencia-titulo"
-                    type="text"
-                    required
-                    placeholder="Titulo de la ponencia"
-                    value={formPonencia.titulo}
-                    onChange={(e) => setFormPonencia((prev) => ({ ...prev, titulo: e.target.value }))}
-                    className="w-full px-3 py-2.5 rounded-lg border border-slate-200 text-sm font-medium text-slate-800 bg-slate-50 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all placeholder:text-slate-400"
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label htmlFor="input-ponencia-ponente" className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
-                      Ponente
-                    </label>
-                    <input
-                      id="input-ponencia-ponente"
-                      type="text"
-                      placeholder="Nombre del ponente"
-                      value={formPonencia.ponente}
-                      onChange={(e) => setFormPonencia((prev) => ({ ...prev, ponente: e.target.value }))}
-                      className="w-full px-3 py-2.5 rounded-lg border border-slate-200 text-sm font-medium text-slate-800 bg-slate-50 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all placeholder:text-slate-400"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="input-ponencia-hora" className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
-                      Hora
-                    </label>
-                    <input
-                      id="input-ponencia-hora"
-                      type="text"
-                      placeholder="09:00 - 09:30"
-                      value={formPonencia.hora}
-                      onChange={(e) => setFormPonencia((prev) => ({ ...prev, hora: e.target.value }))}
-                      className="w-full px-3 py-2.5 rounded-lg border border-slate-200 text-sm font-medium text-slate-800 bg-slate-50 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all placeholder:text-slate-400"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label htmlFor="input-ponencia-lugar" className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
-                    Lugar
-                  </label>
-                  <input
-                    id="input-ponencia-lugar"
-                    type="text"
-                    placeholder="Ej: Auditorio Principal"
-                    value={formPonencia.lugar}
-                    onChange={(e) => setFormPonencia((prev) => ({ ...prev, lugar: e.target.value }))}
-                    className="w-full px-3 py-2.5 rounded-lg border border-slate-200 text-sm font-medium text-slate-800 bg-slate-50 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all placeholder:text-slate-400"
-                  />
-                </div>
-                <button
-                  id="btn-submit-agregar-ponencia"
-                  type="submit"
-                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-700 text-white font-bold text-sm tracking-wide transition-all shadow-sm cursor-pointer"
-                >
-                  <Plus className="w-4 h-4" />
-                  Agregar Ponencia
-                </button>
-              </form>
+          {/* Formulario B: Crear Ponencia */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
+              <Users className="w-5 h-5 text-amber-500" />
+              <h3 className="font-extrabold text-sm md:text-base tracking-tight text-slate-800">
+                AGREGAR PONENCIA
+              </h3>
             </div>
+            <form id="form-agregar-ponencia" onSubmit={handleAgregarPonencia} className="space-y-3">
+              <div>
+                <label htmlFor="select-ponencia-dia" className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
+                  Asignar al Dia *
+                </label>
+                <select
+                  id="select-ponencia-dia"
+                  required
+                  value={formPonencia.diaId}
+                  onChange={(e) => setFormPonencia((prev) => ({ ...prev, diaId: e.target.value }))}
+                  className="w-full px-3 py-2.5 rounded-lg border border-slate-200 text-sm font-medium text-slate-800 bg-slate-50 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all cursor-pointer"
+                >
+                  {dias.map((dia) => (
+                    <option key={dia.id} value={dia.id}>
+                      {dia.fecha}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label htmlFor="input-ponencia-titulo" className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
+                  Titulo *
+                </label>
+                <input
+                  id="input-ponencia-titulo"
+                  type="text"
+                  required
+                  placeholder="Titulo de la ponencia"
+                  value={formPonencia.titulo}
+                  onChange={(e) => setFormPonencia((prev) => ({ ...prev, titulo: e.target.value }))}
+                  className="w-full px-3 py-2.5 rounded-lg border border-slate-200 text-sm font-medium text-slate-800 bg-slate-50 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all placeholder:text-slate-400"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label htmlFor="input-ponencia-ponente" className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
+                    Ponente
+                  </label>
+                  <input
+                    id="input-ponencia-ponente"
+                    type="text"
+                    placeholder="Nombre del ponente"
+                    value={formPonencia.ponente}
+                    onChange={(e) => setFormPonencia((prev) => ({ ...prev, ponente: e.target.value }))}
+                    className="w-full px-3 py-2.5 rounded-lg border border-slate-200 text-sm font-medium text-slate-800 bg-slate-50 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all placeholder:text-slate-400"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="input-ponencia-hora" className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
+                    Hora
+                  </label>
+                  <input
+                    id="input-ponencia-hora"
+                    type="text"
+                    placeholder="09:00 - 09:30"
+                    value={formPonencia.hora}
+                    onChange={(e) => setFormPonencia((prev) => ({ ...prev, hora: e.target.value }))}
+                    className="w-full px-3 py-2.5 rounded-lg border border-slate-200 text-sm font-medium text-slate-800 bg-slate-50 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all placeholder:text-slate-400"
+                  />
+                </div>
+              </div>
+              <div>
+                <label htmlFor="input-ponencia-lugar" className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
+                  Lugar
+                </label>
+                <input
+                  id="input-ponencia-lugar"
+                  type="text"
+                  placeholder="Ej: Auditorio Principal"
+                  value={formPonencia.lugar}
+                  onChange={(e) => setFormPonencia((prev) => ({ ...prev, lugar: e.target.value }))}
+                  className="w-full px-3 py-2.5 rounded-lg border border-slate-200 text-sm font-medium text-slate-800 bg-slate-50 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all placeholder:text-slate-400"
+                />
+              </div>
+              <button
+                id="btn-submit-agregar-ponencia"
+                type="submit"
+                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-700 text-white font-bold text-sm tracking-wide transition-all shadow-sm cursor-pointer"
+              >
+                <Plus className="w-4 h-4" />
+                Agregar Ponencia
+              </button>
+            </form>
+          </div>
         </div>
 
         {/* Pestanas de Seleccion de Dias — doble .map() OUTER */}
@@ -995,11 +1022,11 @@ export default function Page() {
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-[1fr_auto] gap-8 items-center">
           <div className="text-center md:text-left space-y-2">
             <h3 className="text-sm font-extrabold text-slate-900 uppercase tracking-widest">
-              Centro de Recursos Tecnologicos y Pedagogicos (CRTP)
+              Centro de das Tecnologicos y Pedagogicos (CRTP)
             </h3>
             <p className="text-xs md:text-sm text-slate-500 leading-relaxed max-w-2xl">
               Calle Heroes del Acre Nro. 1850 | Telefono: (591-2) 2491481 2484818-int 117 | Email:{' '}
-              <a href="mailto:faadu.crtp@umsa.bo" className="text-amber-600 font-bold hover:underline transition-colors">
+              <a href="mailto:[EMAIL_ADDRESS]" className="text-amber-600 font-bold hover:underline transition-colors">
                 faadu.crtp@umsa.bo
               </a>
             </p>
@@ -1014,7 +1041,7 @@ export default function Page() {
           </div>
         </div>
         <div className="max-w-7xl mx-auto mt-8 pt-6 border-t border-slate-100 text-center text-[10px] font-medium text-slate-400 uppercase tracking-wider">
-          2026 Facultad de Arquitectura, Artes, Diseno y Urbanismo (FAADU) - UMSA. Todos los derechos reservados.
+          2026 Facultaddasdas de Arquitectura, Artes, Diseno y Urbanismo (FAADU) - UMSA. Todos los derechos reservados.
         </div>
       </footer>
 
